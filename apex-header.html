@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apex Header Component</title>
+
+  <!-- Adobe Fonts - Acumin Pro Wide -->
+  <link rel="stylesheet" href="https://use.typekit.net/vcc1zlh.css">
+
+  <style>
+    /* ============================================
+       APEX HEADER - Standalone Component Styles
+       Based on existing Shopify theme styles
+       ============================================ */
+
+    :root {
+      --apex-test: #CAF24D;
+      --apex-garage: #6432C8;
+      --apex-race: #FF4136;
+      --apex-black: #1E1E1E;
+      --apex-gold: #A8A08B;
+      --apex-charcoal: #646464;
+      --apex-grey: #989795;
+      --apex-steel: #E6E6E6;
+      --racing-gold: #DCAB69;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'acumin-pro-wide', sans-serif;
+    }
+
+    .font-wide-bold {
+      font-family: 'acumin-pro-wide', sans-serif;
+      font-weight: 700;
+    }
+
+    /* ============================================
+       HEADER BASE
+       ============================================ */
+
+    .header-apex {
+      background-color: #1C1C1C;
+      padding: 16px 40px 50px 40px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      width: 100%;
+      visibility: visible;
+      transition: visibility 0.3s ease;
+    }
+
+    .header-apex.menu-open {
+      visibility: hidden;
+    }
+
+    .header-apex__container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex: 1;
+      position: relative;
+    }
+
+    .mobile-header {
+      transition: opacity 0.3s ease;
+    }
+
+    /* ============================================
+       LOGO
+       ============================================ */
+
+    .header-apex__logo {
+      width: 50px;
+      height: 50px;
+      position: absolute;
+      left: 0;
+    }
+
+    .header-apex__logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* ============================================
+       DESKTOP NAVIGATION - Pill Style
+       ============================================ */
+
+    .header-apex__menu {
+      display: flex;
+      margin: 0 auto;
+      align-items: center;
+      background: #646464;
+      border-radius: 35px;
+      justify-content: space-between;
+      flex-wrap: nowrap;
+      padding: 10px 15px;
+      gap: 20px;
+      min-width: fit-content;
+    }
+
+    .header-apex__menu-item {
+      position: relative;
+    }
+
+    .header-apex__menu-link {
+      font-size: 12px;
+      letter-spacing: -0.04em;
+      padding: 10px 20px;
+      transition: all ease-in-out .2s;
+      border-radius: 35px;
+      line-height: 1;
+      color: #000;
+      white-space: nowrap;
+      display: block;
+      text-decoration: none;
+      font-family: 'acumin-pro-wide', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .header-apex__menu-link:hover {
+      background-color: #fff;
+      color: #1C1C1C;
+    }
+
+    /* Colored hover states for each menu item */
+    .header-apex__menu-item:first-child .header-apex__menu-link:hover {
+      background-color: var(--apex-gold);
+    }
+
+    .header-apex__menu-item:nth-child(2) .header-apex__menu-link:hover {
+      background-color: var(--apex-race);
+    }
+
+    .header-apex__menu-item:nth-child(3) .header-apex__menu-link:hover {
+      background-color: var(--apex-test);
+    }
+
+    .header-apex__menu-item:nth-child(4) {
+      background-color: var(--apex-garage);
+      border-radius: 35px;
+    }
+
+    /* ============================================
+       DROPDOWN SUBMENU
+       ============================================ */
+
+    .header-apex__submenu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 15px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1C1C1C;
+      border-radius: 8px;
+      padding: 10px;
+      min-width: 200px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .header-apex__submenu::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: 0;
+      right: 0;
+      height: 20px;
+      background: transparent;
+    }
+
+    .header-apex__menu-item:hover .header-apex__submenu {
+      display: block;
+    }
+
+    .header-apex__submenu-link {
+      display: block;
+      padding: 8px 15px;
+      color: #fff;
+      font-size: 12px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border-radius: 4px;
+      font-family: 'acumin-pro-wide', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .header-apex__submenu-link:hover {
+      background: #646464;
+    }
+
+    /* ============================================
+       RIGHT SIDE ICONS & LINKS
+       ============================================ */
+
+    .header-apex__icons {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      position: absolute;
+      right: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .header-apex__link {
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 36px;
+      letter-spacing: -0.48px;
+      text-transform: uppercase;
+      color: var(--apex-gold);
+      text-decoration: none;
+      transition: all ease-in-out .2s;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      font-family: 'acumin-pro-wide', sans-serif;
+    }
+
+    .header-apex__link:hover {
+      opacity: 0.5;
+    }
+
+    .header-apex__icon-link {
+      text-decoration: none;
+      position: relative;
+      color: #fff;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    .header-apex__icon-link svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .header-apex__cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: #fff;
+      color: #1C1C1C;
+      font-size: 12px;
+      font-weight: bold;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 2px;
+      font-family: 'acumin-pro-wide', sans-serif;
+    }
+
+    /* ============================================
+       MOBILE MENU TOGGLE
+       ============================================ */
+
+    .header-apex__mobile-menu-toggle {
+      background: none;
+      border: none;
+      padding: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header-apex__mobile-menu-icon {
+      display: block;
+      width: 24px;
+      height: 1px;
+      background-color: var(--apex-gold);
+      position: relative;
+      transition: background-color 0.3s;
+    }
+
+    .header-apex__mobile-menu-icon::before,
+    .header-apex__mobile-menu-icon::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 24px;
+      height: 1px;
+      background-color: var(--apex-gold);
+      transition: transform 0.3s;
+    }
+
+    .header-apex__mobile-menu-icon::before {
+      top: -8px;
+    }
+
+    .header-apex__mobile-menu-icon::after {
+      bottom: -8px;
+    }
+
+    /* ============================================
+       MOBILE MENU OVERLAY
+       ============================================ */
+
+    .header-apex__mobile-menu {
+      position: fixed;
+      top: 9px;
+      left: 9px;
+      width: calc(100vw - 18px);
+      border-radius: 30px;
+      height: auto;
+      background-color: var(--apex-charcoal);
+      z-index: 2000;
+      padding: 20px;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0.3s ease, opacity 0.3s ease;
+    }
+
+    .header-apex__mobile-menu.is-active {
+      visibility: visible;
+      opacity: 0.9;
+    }
+
+    .header-apex__mobile-menu-close {
+      position: absolute;
+      top: 20px;
+      right: 65px;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header-apex__mobile-menu-content {
+      margin-top: 80px;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+    }
+
+    .header-apex__mobile-menu-item {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .header-apex__mobile-menu-link {
+      color: #FFFFFF;
+      text-decoration: none;
+      font-family: 'acumin-pro-wide', sans-serif;
+      font-size: 24px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -.96px;
+      text-transform: uppercase;
+      padding: 10px 0;
+      background: none;
+      border: none;
+      text-align: left;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .header-apex__mobile-submenu {
+      display: none;
+      flex-direction: column;
+    }
+
+    .header-apex__mobile-menu-item.is-active .header-apex__mobile-submenu {
+      display: flex;
+    }
+
+    .header-apex__mobile-menu-link.sublink {
+      font-size: 12px;
+      font-weight: 500;
+      border-bottom: none;
+      padding-bottom: 20px;
+    }
+
+    .header-apex__mobile-menu-link.has-submenu {
+      position: relative;
+      padding-right: 30px;
+    }
+
+    .header-apex__mobile-menu-item.is-active .header-apex__mobile-menu-link.has-submenu::after {
+      transform: translateY(-50%) rotate(45deg);
+    }
+
+    .header-apex__mobile-menu-item:last-child .header-apex__mobile-menu-link {
+      border-bottom: none;
+    }
+
+    .header-apex__mobile-menu .header-apex__logo {
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      margin: 0;
+    }
+
+    /* ============================================
+       RESPONSIVE - Mobile
+       ============================================ */
+
+    @media screen and (max-width: 989px) {
+      .desktop-only {
+        display: none !important;
+      }
+
+      .header-apex__container {
+        justify-content: space-between;
+        padding: 10px 20px;
+      }
+
+      .header-apex {
+        width: calc(100% - 18px);
+        left: 9px;
+        top: 9px;
+        padding: 0;
+        background-color: #5D5D5D;
+        border-radius: 30px;
+      }
+
+      .header-apex__logo {
+        position: relative;
+        margin: 0;
+        width: 40px;
+        height: 40px;
+      }
+
+      .header-apex__icons {
+        position: relative;
+        right: 0;
+        top: 0;
+        transform: none;
+        gap: 15px;
+        display: flex;
+        align-items: center;
+      }
+
+      .header-apex__mobile-menu-toggle {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+      }
+
+      .header-apex__container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+      }
+    }
+
+    @media screen and (min-width: 990px) {
+      .mobile-only {
+        display: none !important;
+      }
+    }
+
+    /* ============================================
+       BODY SCROLL LOCK
+       ============================================ */
+
+    body.menu-open {
+      overflow: hidden;
+    }
+
+    /* ============================================
+       HEADER SPACER
+       ============================================ */
+
+    .header-spacer {
+      height: 120px;
+    }
+
+    @media screen and (max-width: 989px) {
+      .header-spacer {
+        height: 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================
+       APEX HEADER - Desktop & Mobile
+       ============================================ -->
+
+  <header class="header-apex mobile-header">
+    <div class="header-apex__container">
+
+      <!-- Logo -->
+      <a href="https://apex-one.us" class="header-apex__logo">
+        <img src="//tires.apex-one.us/cdn/shop/files/Apex_A.png?v=1750069331&width=100" alt="Apex One" width="100" height="80">
+      </a>
+
+      <!-- Desktop Navigation - Pill Style -->
+      <nav class="header-apex__menu desktop-only">
+
+        <div class="header-apex__menu-item">
+          <a href="https://apex-one.us" class="header-apex__menu-link font-wide-bold">APEX ONE</a>
+        </div>
+
+        <div class="header-apex__menu-item">
+          <a href="https://apex-one.squarespace.com/race" class="header-apex__menu-link font-wide-bold">RACE</a>
+          <div class="header-apex__submenu">
+            <a href="https://apex-one.us/marketplace" class="header-apex__submenu-link font-wide-bold">MARKETPLACE</a>
+          </div>
+        </div>
+
+        <div class="header-apex__menu-item">
+          <a href="https://apex-one.us/test" class="header-apex__menu-link font-wide-bold">TEST</a>
+          <div class="header-apex__submenu">
+            <a href="https://apex-one.squarespace.com/test-events" class="header-apex__submenu-link font-wide-bold">EVENT CALENDAR</a>
+          </div>
+        </div>
+
+        <div class="header-apex__menu-item">
+          <a href="https://apex-one.us/tires" class="header-apex__menu-link font-wide-bold">TIRES</a>
+          <div class="header-apex__submenu">
+            <a href="/pages/tire-guidebook" class="header-apex__submenu-link font-wide-bold">TIRE GUIDEBOOK</a>
+          </div>
+        </div>
+
+      </nav>
+
+      <!-- Right Side Actions -->
+      <div class="header-apex__icons">
+        <a class="header-apex__link font-wide-bold desktop-only" href="https://apex-one.us/about">ABOUT</a>
+        <a class="header-apex__link font-wide-bold desktop-only" href="https://apex-one.us/documents">DOCUMENTS</a>
+        <button type="button" class="header-apex__link font-wide-bold desktop-only js-contact-link">CONTACT</button>
+
+        <!-- Mobile Menu Toggle -->
+        <button type="button" class="header-apex__mobile-menu-toggle mobile-only" aria-label="Toggle menu" aria-expanded="false">
+          <span class="header-apex__mobile-menu-icon"></span>
+        </button>
+
+        <!-- Cart -->
+        <button type="button" class="header-apex__icon-link js-cart-link" id="cart-icon-bubble" aria-label="Cart" aria-haspopup="dialog">
+          <svg width="24" height="24" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12.0284 4.59541H1.97163C1.82879 4.59252 1.68714 4.6218 1.55715 4.68108C1.42717 4.74036 1.31219 4.82813 1.22073 4.93788C1.12927 5.04763 1.06368 5.17654 1.02881 5.31508C0.993935 5.45362 0.990679 5.59823 1.01928 5.7382L2.06686 10.976C2.11138 11.1943 2.23107 11.3902 2.40508 11.5294C2.57909 11.6686 2.79641 11.7423 3.0192 11.7379H10.9808C11.2036 11.7423 11.4209 11.6686 11.5949 11.5294C11.7689 11.3902 11.8886 11.1943 11.9331 10.976L12.9807 5.7382C13.0093 5.59823 13.0061 5.45362 12.9712 5.31508C12.9363 5.17654 12.8707 5.04763 12.7793 4.93788C12.6878 4.82813 12.5728 4.74036 12.4428 4.68108C12.3129 4.6218 12.1712 4.59252 12.0284 4.59541Z" stroke="#A8A08B" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8.90469 1.26221L10.8094 4.59535" stroke="#A8A08B" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M3.19063 4.59535L5.09532 1.26221" stroke="#A8A08B" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="header-apex__cart-count">0</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ============================================
+       MOBILE MENU OVERLAY
+       ============================================ -->
+
+  <div class="header-apex__mobile-menu">
+    <!-- Logo in mobile menu -->
+    <a href="https://apex-one.us" class="header-apex__logo">
+      <img src="//tires.apex-one.us/cdn/shop/files/Apex_A.png?v=1750069331&width=100" alt="Apex One" width="100" height="80">
+    </a>
+
+    <!-- Close button -->
+    <button type="button" class="header-apex__mobile-menu-close" aria-label="Close menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 6L6 18" stroke="#A8A08B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M6 6L18 18" stroke="#A8A08B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+    <!-- Cart icon in mobile menu -->
+    <button type="button" class="header-apex__icon-link js-cart-link" style="position: absolute; top: 20px; right: 20px;" aria-label="Cart">
+      <svg width="24" height="24" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12.0284 4.59541H1.97163C1.82879 4.59252 1.68714 4.6218 1.55715 4.68108C1.42717 4.74036 1.31219 4.82813 1.22073 4.93788C1.12927 5.04763 1.06368 5.17654 1.02881 5.31508C0.993935 5.45362 0.990679 5.59823 1.01928 5.7382L2.06686 10.976C2.11138 11.1943 2.23107 11.3902 2.40508 11.5294C2.57909 11.6686 2.79641 11.7423 3.0192 11.7379H10.9808C11.2036 11.7423 11.4209 11.6686 11.5949 11.5294C11.7689 11.3902 11.8886 11.1943 11.9331 10.976L12.9807 5.7382C13.0093 5.59823 13.0061 5.45362 12.9712 5.31508C12.9363 5.17654 12.8707 5.04763 12.7793 4.93788C12.6878 4.82813 12.5728 4.74036 12.4428 4.68108C12.3129 4.6218 12.1712 4.59252 12.0284 4.59541Z" stroke="#A8A08B" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M8.90469 1.26221L10.8094 4.59535" stroke="#A8A08B" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M3.19063 4.59535L5.09532 1.26221" stroke="#A8A08B" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="header-apex__cart-count">0</span>
+    </button>
+
+    <!-- Menu Content -->
+    <div class="header-apex__mobile-menu-content">
+
+      <div class="header-apex__mobile-menu-item">
+        <a href="https://apex-one.us" class="header-apex__mobile-menu-link">APEX ONE</a>
+      </div>
+
+      <div class="header-apex__mobile-menu-item">
+        <button type="button" class="header-apex__mobile-menu-link has-submenu js-mobile-submenu-toggle">RACE</button>
+        <div class="header-apex__mobile-submenu">
+          <a href="https://apex-one.squarespace.com/race" class="header-apex__mobile-menu-link sublink">RACE HOME</a>
+          <a href="https://apex-one.us/marketplace" class="header-apex__mobile-menu-link sublink">MARKETPLACE</a>
+        </div>
+      </div>
+
+      <div class="header-apex__mobile-menu-item">
+        <button type="button" class="header-apex__mobile-menu-link has-submenu js-mobile-submenu-toggle">TEST</button>
+        <div class="header-apex__mobile-submenu">
+          <a href="https://apex-one.us/test" class="header-apex__mobile-menu-link sublink">TEST HOME</a>
+          <a href="https://apex-one.squarespace.com/test-events" class="header-apex__mobile-menu-link sublink">EVENT CALENDAR</a>
+        </div>
+      </div>
+
+      <div class="header-apex__mobile-menu-item">
+        <button type="button" class="header-apex__mobile-menu-link has-submenu js-mobile-submenu-toggle">TIRES</button>
+        <div class="header-apex__mobile-submenu">
+          <a href="https://apex-one.us/tires" class="header-apex__mobile-menu-link sublink">TIRES HOME</a>
+          <a href="/pages/tire-guidebook" class="header-apex__mobile-menu-link sublink">TIRE GUIDEBOOK</a>
+        </div>
+      </div>
+
+      <div class="header-apex__mobile-menu-item">
+        <a href="https://apex-one.us/about" class="header-apex__mobile-menu-link">ABOUT</a>
+      </div>
+
+      <div class="header-apex__mobile-menu-item">
+        <a href="https://apex-one.us/documents" class="header-apex__mobile-menu-link">DOCUMENTS</a>
+      </div>
+
+      <div class="header-apex__mobile-menu-item">
+        <button type="button" class="header-apex__mobile-menu-link js-contact-link">CONTACT</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- End APEX HEADER -->
+
+  <!-- Spacer -->
+  <div class="header-spacer"></div>
+
+  <!-- Demo Content -->
+  <main style="padding: 40px 24px; background: var(--apex-black); min-height: 100vh; color: var(--apex-gold);">
+    <h1 style="font-family: 'acumin-pro-wide', sans-serif; font-size: 32px; color: var(--apex-steel); margin-bottom: 16px;">Apex Header Component</h1>
+    <p style="max-width: 600px; line-height: 1.6;">
+      This header now uses your existing Shopify theme styles. The pill-shaped nav, rounded mobile header, and overlay mobile menu are all preserved.
+    </p>
+  </main>
+
+  <!-- ============================================
+       APEX HEADER - JavaScript
+       ============================================ -->
+  <script>
+    (function() {
+      'use strict';
+
+      // Elements
+      const header = document.querySelector('.header-apex');
+      const menuToggle = document.querySelector('.header-apex__mobile-menu-toggle');
+      const mobileMenu = document.querySelector('.header-apex__mobile-menu');
+      const mobileMenuClose = document.querySelector('.header-apex__mobile-menu-close');
+      const submenuToggles = document.querySelectorAll('.js-mobile-submenu-toggle');
+      const contactButtons = document.querySelectorAll('.js-contact-link');
+      const cartButtons = document.querySelectorAll('.js-cart-link');
+
+      // Open mobile menu
+      function openMobileMenu() {
+        mobileMenu.classList.add('is-active');
+        header.classList.add('menu-open');
+        document.body.classList.add('menu-open');
+        menuToggle.setAttribute('aria-expanded', 'true');
+      }
+
+      // Close mobile menu
+      function closeMobileMenu() {
+        mobileMenu.classList.remove('is-active');
+        header.classList.remove('menu-open');
+        document.body.classList.remove('menu-open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+      }
+
+      // Toggle mobile menu
+      function toggleMobileMenu() {
+        if (mobileMenu.classList.contains('is-active')) {
+          closeMobileMenu();
+        } else {
+          openMobileMenu();
+        }
+      }
+
+      // Toggle submenu
+      function toggleSubmenu(e) {
+        const menuItem = e.target.closest('.header-apex__mobile-menu-item');
+        menuItem.classList.toggle('is-active');
+      }
+
+      // Event Listeners
+      if (menuToggle) {
+        menuToggle.addEventListener('click', toggleMobileMenu);
+      }
+
+      if (mobileMenuClose) {
+        mobileMenuClose.addEventListener('click', closeMobileMenu);
+      }
+
+      // Submenu toggles
+      submenuToggles.forEach(toggle => {
+        toggle.addEventListener('click', toggleSubmenu);
+      });
+
+      // Close mobile menu on link click
+      const mobileLinks = mobileMenu.querySelectorAll('a');
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', closeMobileMenu);
+      });
+
+      // Close menu on escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && mobileMenu.classList.contains('is-active')) {
+          closeMobileMenu();
+        }
+      });
+
+      // Close menu when resizing to desktop
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 989 && mobileMenu.classList.contains('is-active')) {
+          closeMobileMenu();
+        }
+      });
+
+      // Contact button handler
+      contactButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          closeMobileMenu();
+          console.log('Contact clicked - add your handler');
+        });
+      });
+
+      // Cart button handler
+      cartButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          console.log('Cart clicked - add your handler');
+        });
+      });
+
+      // Update cart count
+      window.updateApexCartCount = function(count) {
+        const cartCounts = document.querySelectorAll('.header-apex__cart-count');
+        cartCounts.forEach(el => {
+          el.textContent = count;
+        });
+      };
+
+    })();
+  </script>
+
+</body>
+</html>

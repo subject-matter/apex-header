@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apex Header - CDN Test</title>
+  
+  <!-- Adobe Fonts - Acumin Pro Wide -->
+  <link rel="stylesheet" href="https://use.typekit.net/vcc1zlh.css">
+  
+  <style>
+    /* Page styles - NOT part of the header component */
+    body {
+      margin: 0;
+      padding: 0;
+      background: #1E1E1E;
+      color: #A8A08B;
+      font-family: 'acumin-pro-wide', -apple-system, sans-serif;
+      min-height: 200vh; /* Scrollable */
+    }
+    
+    .demo-content {
+      padding: 40px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      color: #E6E6E6;
+      font-size: 48px;
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+    
+    h2 {
+      color: #E6E6E6;
+      font-size: 24px;
+      margin: 40px 0 16px;
+      font-weight: 700;
+    }
+    
+    p {
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    
+    code {
+      background: rgba(168, 160, 139, 0.15);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 14px;
+    }
+    
+    pre {
+      background: rgba(168, 160, 139, 0.1);
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    .badge {
+      display: inline-block;
+      background: #CAF24D;
+      color: #1E1E1E;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    
+    .test-btn {
+      background: #6432C8;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-right: 12px;
+      margin-bottom: 12px;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    
+    .test-btn:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 
+    =====================================================
+    APEX HEADER - Just include this ONE script!
+    The header auto-injects at the top of <body>
+    =====================================================
+  -->
+  <script src="dist/apex-header.js?v=6"></script>
+
+  <!-- Your page content goes here -->
+  <div class="demo-content">
+    <span class="badge">~4.7KB gzipped</span>
+    <h1>Apex Header Component</h1>
+    <p>
+      This is a test page demonstrating the self-injecting Apex header component. 
+      The header is loaded via a single <code>&lt;script&gt;</code> tag — no other 
+      setup required.
+    </p>
+
+    <h2>Usage</h2>
+    <p>To add the header to any website, just include this script:</p>
+    <pre>&lt;script src="https://your-cdn.com/apex-header.min.js"&gt;&lt;/script&gt;</pre>
+    <p>That's it! The script automatically:</p>
+    <ul style="margin-left: 20px; margin-bottom: 20px;">
+      <li>Injects the CSS styles</li>
+      <li>Creates the header HTML</li>
+      <li>Sets up all event handlers</li>
+      <li>Handles mobile menu, dropdowns, and accessibility</li>
+    </ul>
+
+    <h2>Test Actions</h2>
+    <p>Click these buttons to test the cart count feature:</p>
+    <button class="test-btn" onclick="updateApexCartCount(0)">Cart: 0</button>
+    <button class="test-btn" onclick="updateApexCartCount(1)">Cart: 1</button>
+    <button class="test-btn" onclick="updateApexCartCount(5)">Cart: 5</button>
+    <button class="test-btn" onclick="updateApexCartCount(99)">Cart: 99</button>
+
+    <h2>Event Handling</h2>
+    <p>Listen for custom events from the header:</p>
+    <pre>document.addEventListener('apex-header:action', (e) => {
+  console.log('Action:', e.detail.action);
+  // Handle 'contact', 'cart', etc.
+});</pre>
+
+    <h2>Features</h2>
+    <ul style="margin-left: 20px;">
+      <li>✅ Pill-shaped desktop navigation</li>
+      <li>✅ Smooth dropdown menus with fade-slide animation</li>
+      <li>✅ Mobile drawer with spring easing</li>
+      <li>✅ Staggered menu item animations</li>
+      <li>✅ Accordion submenus</li>
+      <li>✅ Backdrop blur effect</li>
+      <li>✅ Keyboard accessible (Escape to close)</li>
+      <li>✅ Focus trap in mobile drawer</li>
+      <li>✅ Body scroll lock when drawer open</li>
+      <li>✅ Cart count with animated badge</li>
+    </ul>
+
+    <h2>Customization</h2>
+    <p>
+      Edit the <code>CONFIG</code> object in <code>src/apex-header.js</code> to change 
+      menu items, links, and actions. Then rebuild with <code>npm run build</code>.
+    </p>
+  </div>
+
+  <script>
+    // Example: Listen for header actions
+    document.addEventListener('apex-header:action', (e) => {
+      const action = e.detail.action;
+      
+      if (action === 'contact') {
+        alert('Contact button clicked! Add your modal or mailto: link here.');
+      }
+      
+      if (action === 'cart') {
+        alert('Cart button clicked! Open your cart drawer here.');
+      }
+    });
+  </script>
+
+</body>
+</html>
+
