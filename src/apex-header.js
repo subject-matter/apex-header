@@ -26,16 +26,19 @@
       {
         label: 'APEX ONE',
         href: 'https://apex-one.us',
-        submenu: null,
+        submenu: [
+          { label: 'ABOUT', href: 'https://apex-one.us/about' }
+        ],
         activeOn: [] // Never show as active
       },
       {
         label: 'RACE',
         href: 'https://apex-one.squarespace.com/race',
         submenu: [
-          { label: 'MARKETPLACE', href: 'https://apex-one.us/marketplace' }
+          { label: 'MARKETPLACE', href: 'https://apex-one.us/marketplace' },
+          { label: 'DOCUMENTS', href: 'https://apex-one.us/documents' }
         ],
-        activeOn: ['/race', 'squarespace.com/race', '/marketplace']
+        activeOn: ['/race', 'squarespace.com/race', '/marketplace', '/documents']
       },
       {
         label: 'TEST',
@@ -56,8 +59,6 @@
     ],
 
     actions: [
-      { label: 'ABOUT', href: 'https://apex-one.us/about', type: 'link' },
-      { label: 'DOCUMENTS', href: 'https://apex-one.us/documents', type: 'link' },
       { label: 'CONTACT', href: null, type: 'button', action: 'contact' }
     ],
 
