@@ -89,6 +89,15 @@
   transition: transform 0.3s var(--ease-out-quart), opacity 0.3s ease;
 }
 
+/* Desktop logo visible by default, mobile hidden */
+.apex-header__logo--desktop {
+  display: block;
+}
+
+.apex-header__logo--mobile {
+  display: none;
+}
+
 .apex-header__logo:hover {
   transform: scale(1.05);
 }
@@ -677,6 +686,15 @@
     display: flex;
     justify-content: space-between;
     padding: 12px 20px;
+  }
+
+  /* Swap logos on mobile */
+  .apex-header__logo--desktop {
+    display: none;
+  }
+
+  .apex-header__logo--mobile {
+    display: block;
   }
 
   .apex-header__logo {

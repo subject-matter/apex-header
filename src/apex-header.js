@@ -98,7 +98,7 @@
               href: 'https://apex-one.squarespace.com/race'
             },
             mobileLogo: {
-              src: 'https://static1.squarespace.com/static/67b49f652c87060b45852167/t/67b4bcd645dab014ad0bcd58/1739898070690/Endurance.png',
+              src: 'https://static1.squarespace.com/static/67b49f652c87060b45852167/t/67bc57234c893639ae0e3d0e/1740396323782/E-Logo.png',
               alt: 'Apex Endurance',
               href: 'https://apex-one.squarespace.com/race'
             }
@@ -273,8 +273,11 @@
     return `
     <header class="apex-header">
       <div class="apex-header__container">
-        <a href="${desktopLogo.href}" class="apex-header__logo${alternateClass}">
+        <a href="${desktopLogo.href}" class="apex-header__logo apex-header__logo--desktop${alternateClass}">
           <img src="${desktopLogo.src}" alt="${desktopLogo.alt}">
+        </a>
+        <a href="${mobileLogo.href}" class="apex-header__logo apex-header__logo--mobile${alternateClass}">
+          <img src="${mobileLogo.src}" alt="${mobileLogo.alt}">
         </a>
         
         <nav>
