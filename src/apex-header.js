@@ -71,6 +71,16 @@
     // ============================================
 
     rules: {
+      // Hide header entirely on these domains/URLs
+      hideHeaderOn: [
+        'apex-one.us'
+      ],
+      
+      // Exclude from hideHeaderOn (subdomains that SHOULD show header)
+      showHeaderOn: [
+        'tires.apex-one.us'
+      ],
+
       // Only show cart icon on these URL patterns (empty = hidden everywhere except these)
       showCartOn: [
         'tires.apex-one.us'
@@ -119,6 +129,19 @@
     if (!patterns || !Array.isArray(patterns)) return false;
     const url = getCurrentUrl().toLowerCase();
     return patterns.some(pattern => url.includes(pattern.toLowerCase()));
+  }
+
+  function shouldShowHeader() {
+    const hidePatterns = CONFIG.rules?.hideHeaderOn || [];
+    const showPatterns = CONFIG.rules?.showHeaderOn || [];
+    
+    // First check if explicitly shown (subdomains like tires.apex-one.us)
+    if (urlMatches(showPatterns)) return true;
+    
+    // Then check if should be hidden
+    if (urlMatches(hidePatterns)) return false;
+    
+    return true;
   }
 
   function getActiveLogo(forMobile = false) {
@@ -592,6 +615,12 @@
   }
 
   function initApexHeader() {
+    // Check if header should be shown on this URL
+    if (!shouldShowHeader()) {
+      console.log('Apex Header: Hidden on this domain');
+      return;
+    }
+    
     // Create instance and expose to window
     window.ApexHeader = new ApexHeader();
 

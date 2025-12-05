@@ -98,9 +98,7 @@
   display: none;
 }
 
-.apex-header__logo:hover {
-  transform: scale(1.05);
-}
+
 
 .apex-header__logo img {
   width: auto;
