@@ -680,8 +680,17 @@
   }
 
   .apex-header__logo {
-    width: 40px;
+    width: auto;
+    height: auto;
+  }
+
+  .apex-header__logo img {
     height: 40px;
+  }
+
+  /* Alternate logo on mobile header - 25px */
+  .apex-header__logo.is-alternate img {
+    height: 25px;
   }
 
   .apex-header__nav,
