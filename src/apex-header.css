@@ -290,7 +290,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: 8px 0;
+  padding: 0;
   position: relative;
   transition: color 0.2s var(--ease-smooth);
   white-space: nowrap;
@@ -299,7 +299,7 @@
 .apex-header__action-link::after {
   content: '';
   position: absolute;
-  bottom: 4px;
+  bottom: -2px;
   left: 0;
   width: 100%;
   height: 1px;
