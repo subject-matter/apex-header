@@ -7,7 +7,7 @@
 :root {
   --apex-test: #CAF24D;
   --apex-garage: #6432C8;
-  --apex-race: ##FF4E02;
+  --apex-race: #FF4E02;
   --apex-black: #1E1E1E;
   --apex-gold: #A8A08B;
   --apex-charcoal: #646464;
@@ -146,6 +146,8 @@
     background-color 0.25s var(--ease-smooth),
     color 0.25s var(--ease-smooth),
     transform 0.2s var(--ease-out-quart);
+    width: 105px;
+    text-align: center;
 }
 
 .apex-header__nav-link:hover {
@@ -256,6 +258,8 @@
   transition:
     background-color 0.2s var(--ease-smooth),
     color 0.2s var(--ease-smooth);
+    text-align: center;
+    white-space: nowrap;
 }
 
 .apex-header__dropdown-link:hover {
@@ -579,10 +583,7 @@
   color: var(--apex-gold);
 }
 
-/* Active state for mobile menu */
-.apex-mobile-drawer__item.is-active .apex-mobile-drawer__link {
-  color: var(--apex-gold);
-}
+
 
 .apex-mobile-drawer__arrow {
   width: 20px;
