@@ -257,14 +257,31 @@
     `;
   }
 
+  function isAlternateLogo() {
+    const rules = CONFIG.rules?.alternateLogo || [];
+    const url = getCurrentUrl().toLowerCase();
+    
+    for (const rule of rules) {
+      let matches = false;
+      if (rule.patterns && Array.isArray(rule.patterns)) {
+        matches = rule.patterns.some(p => url.includes(p.toLowerCase()));
+      } else if (rule.pattern) {
+        matches = url.includes(rule.pattern.toLowerCase());
+      }
+      if (matches) return true;
+    }
+    return false;
+  }
+
   function getHeaderHTML() {
     const desktopLogo = getActiveLogo(false);
     const mobileLogo = getActiveLogo(true);
+    const alternateClass = isAlternateLogo() ? ' is-alternate' : '';
 
     return `
     <header class="apex-header">
       <div class="apex-header__container">
-        <a href="${desktopLogo.href}" class="apex-header__logo">
+        <a href="${desktopLogo.href}" class="apex-header__logo${alternateClass}">
           <img src="${desktopLogo.src}" alt="${desktopLogo.alt}">
         </a>
         
@@ -290,7 +307,7 @@
     
     <div class="apex-mobile-drawer js-mobile-drawer" aria-hidden="true">
       <div class="apex-mobile-drawer__header">
-        <a href="${mobileLogo.href}" class="apex-mobile-drawer__logo">
+        <a href="${mobileLogo.href}" class="apex-mobile-drawer__logo${alternateClass}">
           <img src="${mobileLogo.src}" alt="${mobileLogo.alt}">
         </a>
         <div class="apex-mobile-drawer__header-actions">
@@ -533,6 +550,11 @@
       // Close drawer if open
       if (this.isDrawerOpen) {
         this.closeDrawer();
+      }
+
+      // Handle contact action - open infodot drawer
+      if (action === 'contact') {
+        document.body.classList.add('infodot-active');
       }
 
       // Dispatch custom event for external handling
