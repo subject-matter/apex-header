@@ -35,7 +35,7 @@
         label: 'APEX ONE',
         href: 'https://apex-one.us',
         submenu: null,
-        activeOn: ['apex-one.us']
+        activeOn: []
       },
       {
         label: 'RACE',
@@ -79,23 +79,13 @@
     // ============================================
     
     rules: {
-      // Hide cart icon on these URL patterns
-      hideCartOn: [
-        'squarespace.com',
-        '/about',
-        '/documents'
+      // Only show cart icon on these URL patterns
+      showCartOn: [
+        'tires.apex-one.us'
       ],
       
-      // Show alternate logo on these URL patterns
+      // Show alternate logo on these URL patterns (55px desktop, 25px mobile)
       alternateLogo: [
-        {
-          pattern: 'tires.apex-one.us',
-          logo: {
-            src: '//tires.apex-one.us/cdn/shop/files/Apex_A.png?v=1750069331&width=100',
-            alt: 'Apex Tires',
-            href: 'https://tires.apex-one.us'
-          }
-        },
         {
           patterns: ['/race','/marketplace','/marketplace-form','/accreditation-form','/cota-endurance','/endurance-registration','/sebring-endurance','/tickets','/gallery'],
           logo: {
@@ -161,8 +151,9 @@
   }
   
   function shouldShowCart() {
-    const hidePatterns = CONFIG.rules?.hideCartOn || [];
-    return !urlMatches(hidePatterns);
+    const showPatterns = CONFIG.rules?.showCartOn || [];
+    if (showPatterns.length === 0) return true;
+    return urlMatches(showPatterns);
   }
   
   function isNavItemActive(item) {

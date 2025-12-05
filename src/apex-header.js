@@ -27,7 +27,7 @@
         label: 'APEX ONE',
         href: 'https://apex-one.us',
         submenu: null,
-        activeOn: ['apex-one.us'] // Active when URL contains this
+        activeOn: [] // Never show as active
       },
       {
         label: 'RACE',
@@ -71,25 +71,16 @@
     // ============================================
 
     rules: {
-      // Hide cart icon on these URL patterns
-      hideCartOn: [
-        'squarespace.com',
-
+      // Only show cart icon on these URL patterns (empty = hidden everywhere except these)
+      showCartOn: [
+        'tires.apex-one.us'
       ],
 
       // Show alternate logo on these URL patterns
         // Each rule: { patterns: ['url-pattern', ...], logo: { src, alt, href }, mobileLogo: { src, alt, href } }
         alternateLogo: [
           {
-            pattern: 'tires.apex-one.us',
-            logo: {
-              src: '//tires.apex-one.us/cdn/shop/files/Apex_A.png?v=1750069331&width=100',
-              alt: 'Apex Tires',
-              href: 'https://tires.apex-one.us'
-            }
-          },
-          {
-            // Endurance logo for race-related pages
+            // Endurance logo for race-related pages (55px desktop, 25px mobile)
             patterns: [
               '/race',
               '/marketplace',
@@ -156,8 +147,9 @@
   }
 
   function shouldShowCart() {
-    const hidePatterns = CONFIG.rules?.hideCartOn || [];
-    return !urlMatches(hidePatterns);
+    const showPatterns = CONFIG.rules?.showCartOn || [];
+    if (showPatterns.length === 0) return true; // Show everywhere if no patterns defined
+    return urlMatches(showPatterns); // Only show on matching URLs
   }
 
   function isNavItemActive(item) {
