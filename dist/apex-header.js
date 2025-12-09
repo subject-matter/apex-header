@@ -342,6 +342,13 @@
       document.body.classList.add('apex-menu-open');
       this.mobileToggle?.setAttribute('aria-expanded', 'true');
       this.mobileDrawer?.setAttribute('aria-hidden', 'false');
+      
+      // Close any open Shopify drawers
+      const contactDrawer = document.querySelector('contact-drawer');
+      if (contactDrawer && typeof contactDrawer.close === 'function') contactDrawer.close();
+      const cartDrawer = document.querySelector('cart-drawer');
+      if (cartDrawer && typeof cartDrawer.close === 'function') cartDrawer.close();
+      
       setTimeout(() => this.mobileClose?.focus(), 50);
     }
 
@@ -365,11 +372,27 @@
     }
 
     handleAction(e) {
+      e.preventDefault();
       const action = e.currentTarget.dataset.action;
       if (this.isDrawerOpen) this.closeDrawer();
+      
+      // Handle cart action - open Shopify cart-drawer
+      if (action === 'cart') {
+        const contactDrawer = document.querySelector('contact-drawer');
+        if (contactDrawer && typeof contactDrawer.close === 'function') contactDrawer.close();
+        const cartDrawer = document.querySelector('cart-drawer');
+        if (cartDrawer && typeof cartDrawer.open === 'function') cartDrawer.open();
+      }
+      
+      // Handle contact action - open contact drawer
       if (action === 'contact') {
+        const cartDrawer = document.querySelector('cart-drawer');
+        if (cartDrawer && typeof cartDrawer.close === 'function') cartDrawer.close();
+        const contactDrawer = document.querySelector('contact-drawer');
+        if (contactDrawer && typeof contactDrawer.open === 'function') contactDrawer.open();
         document.body.classList.add('infodot-active');
       }
+      
       document.dispatchEvent(new CustomEvent('apex-header:action', { detail: { action }, bubbles: true }));
       console.log(`Apex Header: "${action}" action triggered`);
     }
