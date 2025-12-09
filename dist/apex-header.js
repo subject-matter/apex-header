@@ -60,7 +60,7 @@
         label: 'TIRES',
         href: 'https://apex-one.us/tires',
         submenu: [
-          { label: 'TIRE GUIDEBOOK', href: '/pages/tire-guidebook' }
+          { label: 'TIRE GUIDEBOOK', href: 'https://tires.apex-one.us/pages/tire-guidebook' }
         ],
         activeOn: ['/tires', 'tire-guidebook', 'tires.apex-one.us']
       }
