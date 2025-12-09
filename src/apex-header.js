@@ -76,7 +76,7 @@
       hideHeaderOn: [
         'apex-one.us'
       ],
-      
+
       // Exclude from hideHeaderOn (subdomains that SHOULD show header)
       showHeaderOn: [
         'tires.apex-one.us'
@@ -135,13 +135,13 @@
   function shouldShowHeader() {
     const hidePatterns = CONFIG.rules?.hideHeaderOn || [];
     const showPatterns = CONFIG.rules?.showHeaderOn || [];
-    
+
     // First check if explicitly shown (subdomains like tires.apex-one.us)
     if (urlMatches(showPatterns)) return true;
-    
+
     // Then check if should be hidden
     if (urlMatches(hidePatterns)) return false;
-    
+
     return true;
   }
 
@@ -276,7 +276,7 @@
   function isAlternateLogo() {
     const rules = CONFIG.rules?.alternateLogo || [];
     const url = getCurrentUrl().toLowerCase();
-    
+
     for (const rule of rules) {
       let matches = false;
       if (rule.patterns && Array.isArray(rule.patterns)) {
@@ -303,27 +303,27 @@
         <a href="${mobileLogo.href}" class="apex-header__logo apex-header__logo--mobile${alternateClass}">
           <img src="${mobileLogo.src}" alt="${mobileLogo.alt}">
         </a>
-        
+
         <nav>
           <ul class="apex-header__nav">
             ${generateNavItems()}
           </ul>
         </nav>
-        
+
         <div class="apex-header__actions">
           ${generateActionLinks(false)}
-          
+
           <button type="button" class="apex-header__mobile-toggle js-mobile-toggle" aria-label="Open menu" aria-expanded="false">
             <span class="apex-header__hamburger"></span>
           </button>
-          
+
           ${generateCartButton()}
         </div>
       </div>
     </header>
-    
+
     <div class="apex-mobile-backdrop js-mobile-backdrop"></div>
-    
+
     <div class="apex-mobile-drawer js-mobile-drawer" aria-hidden="true">
       <div class="apex-mobile-drawer__header">
         <a href="${mobileLogo.href}" class="apex-mobile-drawer__logo${alternateClass}">
@@ -338,18 +338,18 @@
           ${generateCartButton()}
         </div>
       </div>
-      
+
       <nav>
         <ul class="apex-mobile-drawer__nav">
           ${generateMobileNavItems()}
         </ul>
       </nav>
-      
+
       <div class="apex-mobile-drawer__footer">
         ${generateActionLinks(true)}
       </div>
     </div>
-    
+
     <div class="apex-header-spacer"></div>
   `;
   }
@@ -439,7 +439,7 @@
 
     setupScrollBehavior() {
       let ticking = false;
-      
+
       window.addEventListener('scroll', () => {
         if (!ticking) {
           window.requestAnimationFrame(() => {
@@ -453,20 +453,20 @@
 
     handleScroll() {
       const currentScrollY = window.scrollY;
-      
+
       // Don't hide if drawer is open
       if (this.isDrawerOpen) {
         this.lastScrollY = currentScrollY;
         return;
       }
-      
+
       // Always show at top of page
       if (currentScrollY < this.scrollThreshold) {
         this.showHeader();
         this.lastScrollY = currentScrollY;
         return;
       }
-      
+
       // Scrolling down - hide header
       if (currentScrollY > this.lastScrollY && currentScrollY > this.scrollThreshold) {
         this.hideHeader();
@@ -475,7 +475,7 @@
       else if (currentScrollY < this.lastScrollY) {
         this.showHeader();
       }
-      
+
       this.lastScrollY = currentScrollY;
     }
 
@@ -510,6 +510,17 @@
 
       this.mobileToggle?.setAttribute('aria-expanded', 'true');
       this.mobileDrawer?.setAttribute('aria-hidden', 'false');
+
+      // Close any open Shopify drawers
+      const contactDrawer = document.querySelector('contact-drawer');
+      if (contactDrawer && typeof contactDrawer.close === 'function') {
+        contactDrawer.close();
+      }
+
+      const cartDrawer = document.querySelector('cart-drawer');
+      if (cartDrawer && typeof cartDrawer.close === 'function') {
+        cartDrawer.close();
+      }
 
       // Focus the close button
       setTimeout(() => {
@@ -564,15 +575,44 @@
     }
 
     handleAction(e) {
+      e.preventDefault();
       const action = e.currentTarget.dataset.action;
 
-      // Close drawer if open
+      // Close mobile drawer if open
       if (this.isDrawerOpen) {
         this.closeDrawer();
       }
 
-      // Handle contact action - open infodot drawer
+      // Handle cart action - open Shopify cart-drawer
+      if (action === 'cart') {
+        // Close contact drawer if open
+        const contactDrawer = document.querySelector('contact-drawer');
+        if (contactDrawer && typeof contactDrawer.close === 'function') {
+          contactDrawer.close();
+        }
+
+        // Open Shopify cart drawer
+        const cartDrawer = document.querySelector('cart-drawer');
+        if (cartDrawer && typeof cartDrawer.open === 'function') {
+          cartDrawer.open();
+        }
+      }
+
+      // Handle contact action - open contact drawer
       if (action === 'contact') {
+        // Close cart drawer if open
+        const cartDrawer = document.querySelector('cart-drawer');
+        if (cartDrawer && typeof cartDrawer.close === 'function') {
+          cartDrawer.close();
+        }
+
+        // Open contact drawer (Shopify custom element)
+        const contactDrawer = document.querySelector('contact-drawer');
+        if (contactDrawer && typeof contactDrawer.open === 'function') {
+          contactDrawer.open();
+        }
+
+        // Fallback: add infodot-active class for non-Shopify implementations
         document.body.classList.add('infodot-active');
       }
 
@@ -621,7 +661,7 @@
       console.log('Apex Header: Hidden on this domain');
       return;
     }
-    
+
     // Create instance and expose to window
     window.ApexHeader = new ApexHeader();
 
