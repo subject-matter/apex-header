@@ -260,6 +260,7 @@
     color 0.2s var(--ease-smooth);
     text-align: center;
     white-space: nowrap;
+    text-align: center;
 }
 
 .apex-header__dropdown-link:hover {
@@ -768,5 +769,27 @@ body.apex-menu-open {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+/* ============================================
+   SHOPIFY DRAWER OVERRIDES
+   Ensure Shopify drawers appear above Apex header
+   ============================================ */
+
+cart-drawer,
+cart-drawer .drawer,
+.cart-drawer,
+.drawer.drawer--right {
+  z-index: 9001 !important;
+}
+
+cart-drawer .drawer__overlay,
+.drawer__overlay {
+  z-index: 9001 !important;
+}
+
+contact-drawer,
+contact-drawer .drawer {
+  z-index: 9001 !important;
 }
 
