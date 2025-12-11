@@ -75,8 +75,6 @@
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   position: relative;
-  max-width: 1600px;
-  margin: 0 auto;
 }
 
 /* ============================================
