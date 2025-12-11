@@ -1,6 +1,6 @@
 /**
  * APEX HEADER - Lightweight CDN Component
- * Version: 1.1.0
+ * Version: 1.2.0
  *
  * Self-injecting header component with smooth animations.
  * Just include this script and it handles everything.
