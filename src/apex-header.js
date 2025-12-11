@@ -1,6 +1,6 @@
 /**
  * APEX HEADER - Lightweight CDN Component
- * Version: 1.2.0
+ * Version: 1.3.0
  *
  * Self-injecting header component with smooth animations.
  * Just include this script and it handles everything.
@@ -71,15 +71,11 @@
     // ============================================
 
     rules: {
-      // Hide header entirely on these domains/URLs
-      hideHeaderOn: [
-        'apex-one.us'
-      ],
+      // Hide header entirely on these domains/URLs (empty = show everywhere)
+      hideHeaderOn: [],
 
       // Exclude from hideHeaderOn (subdomains that SHOULD show header)
-      showHeaderOn: [
-        'tires.apex-one.us'
-      ],
+      showHeaderOn: [],
 
       // Only show cart icon on these URL patterns (empty = hidden everywhere except these)
       showCartOn: [
