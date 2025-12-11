@@ -26,19 +26,16 @@
       {
         label: 'APEX ONE',
         href: 'https://apex-one.us',
-        submenu: [
-          { label: 'ABOUT', href: 'https://apex-one.us/about' }
-        ],
+        submenu: [],
         activeOn: [] // Never show as active
       },
       {
         label: 'RACE',
         href: 'https://apex-one.squarespace.com/race',
         submenu: [
-          { label: 'MARKETPLACE', href: 'https://apex-one.us/marketplace' },
-          { label: 'DOCUMENTS', href: 'https://apex-one.us/documents' }
+          { label: 'MARKETPLACE', href: 'https://apex-one.us/marketplace' }
         ],
-        activeOn: ['/race', 'squarespace.com/race', '/marketplace', '/documents']
+        activeOn: ['/race', 'squarespace.com/race', '/marketplace']
       },
       {
         label: 'TEST',
@@ -59,6 +56,8 @@
     ],
 
     actions: [
+      { label: 'ABOUT', href: 'https://apex-one.us/about', type: 'link' },
+      { label: 'DOCUMENTS', href: 'https://apex-one.us/documents', type: 'link' },
       { label: 'CONTACT', href: null, type: 'button', action: 'contact' }
     ],
 
@@ -129,7 +128,16 @@
   function urlMatches(patterns) {
     if (!patterns || !Array.isArray(patterns)) return false;
     const url = getCurrentUrl().toLowerCase();
-    return patterns.some(pattern => url.includes(pattern.toLowerCase()));
+    const hostname = window.location.hostname.toLowerCase();
+    return patterns.some(pattern => {
+      const p = pattern.toLowerCase();
+      // Exact hostname match for domain patterns (no path)
+      if (!p.includes('/')) {
+        return hostname === p || hostname === 'www.' + p;
+      }
+      // Path matching for patterns with /
+      return url.includes(p);
+    });
   }
 
   function shouldShowHeader() {
