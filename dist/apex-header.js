@@ -1,6 +1,6 @@
 /**
  * APEX HEADER - Lightweight CDN Component
- * Version: 1.5.0
+ * Version: 1.6.0
  *
  * Self-injecting header component with smooth animations.
  * Just include this script and it handles everything.
@@ -65,6 +65,7 @@
 
     actions: [
       { label: 'ABOUT', href: 'https://apex-one.us/about', type: 'link' },
+      { label: 'MARKETPLACE', href: 'https://apex-one.us/marketplace', type: 'link' },
       { label: 'DOCUMENTS', href: 'https://apex-one.us/documents', type: 'link' },
       { label: 'CONTACT', href: null, type: 'button', action: 'contact' }
     ],
