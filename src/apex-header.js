@@ -655,7 +655,7 @@
       // Insert at the beginning of body
       const html = getHeaderHTML();
       document.body.insertAdjacentHTML('afterbegin', html);
-      
+
       // Verify drawer was injected (Shopify sometimes strips elements)
       setTimeout(() => {
         const drawer = document.querySelector('#apex-contact-drawer');
@@ -667,7 +667,7 @@
         }
       }, 100);
     }
-    
+
     injectDrawerManually(fullHTML) {
       // Extract drawer HTML from the full HTML string
       const drawerStart = fullHTML.indexOf('<div id="apex-contact-drawer"');
@@ -675,7 +675,7 @@
         console.error('Apex Header: Drawer HTML not found in generated HTML');
         return;
       }
-      
+
       // Find the end of the drawer (last </div> before the closing backtick)
       const htmlBeforeDrawer = fullHTML.substring(0, drawerStart);
       const htmlAfterDrawer = fullHTML.substring(drawerStart);
@@ -693,7 +693,7 @@
           }
         }
       }
-      
+
       if (drawerEnd === -1) {
         // Fallback: find last </div> before backtick
         const lastDivIndex = htmlAfterDrawer.lastIndexOf('</div>');
@@ -701,10 +701,10 @@
           drawerEnd = lastDivIndex + 6;
         }
       }
-      
+
       if (drawerEnd !== -1) {
         const drawerHTML = htmlAfterDrawer.substring(0, drawerEnd);
-        
+
         // Try to inject after spacer first
         const spacer = document.querySelector('.apex-header-spacer');
         if (spacer) {
@@ -715,7 +715,7 @@
           document.body.insertAdjacentHTML('beforeend', drawerHTML);
           console.log('Apex Header: Drawer manually injected at end of body');
         }
-        
+
         // Verify it was injected
         setTimeout(() => {
           const drawer = document.querySelector('#apex-contact-drawer');
@@ -1036,41 +1036,6 @@
         return;
       }
 
-      // Wait for body if needed
-      if (!document.body) {
-        const checkBody = setInterval(() => {
-          if (document.body) {
-            clearInterval(checkBody);
-            createHeaderInstance();
-          }
-        }, 50);
-        
-        setTimeout(() => {
-          clearInterval(checkBody);
-          if (document.body) {
-            createHeaderInstance();
-          } else {
-            console.warn('Apex Header: Body not found, initializing anyway');
-            createHeaderInstance();
-          }
-        }, 5000);
-        return;
-      }
-
-      createHeaderInstance();
-    } catch (error) {
-      console.error('Apex Header: Initialization error', error);
-      // Create fallback object so window.ApexHeader always exists
-      window.ApexHeader = {
-        initialized: false,
-        error: error.message,
-        updateCartCount: () => console.warn('Apex Header: Not initialized')
-      };
-    }
-  }
-
-  function createHeaderInstance() {
-    try {
       // Create instance and expose to window
       window.ApexHeader = new ApexHeader();
       console.log('Apex Header: Initialized successfully');
@@ -1082,7 +1047,8 @@
         }
       };
     } catch (error) {
-      console.error('Apex Header: Failed to create instance', error);
+      console.error('Apex Header: Initialization error', error);
+      // Create fallback object so window.ApexHeader always exists
       window.ApexHeader = {
         initialized: false,
         error: error.message,
