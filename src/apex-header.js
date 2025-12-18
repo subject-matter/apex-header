@@ -10,6 +10,199 @@
   'use strict';
 
   // ============================================
+  // STANDALONE DRAWER INJECTION
+  // Runs immediately, independently of ApexHeader
+  // ============================================
+
+  let drawerObserver = null;
+  let reInjectionAttempts = 0;
+  const MAX_REINJECTION_ATTEMPTS = 10;
+
+  function createDrawerElement() {
+    const drawer = document.createElement('div');
+    drawer.id = 'apex-contact-drawer';
+    drawer.className = 'apex-contact-drawer';
+    
+    drawer.innerHTML = `
+      <div class="apex-contact-drawer__overlay"></div>
+      <div class="apex-contact-drawer__container">
+        <div class="apex-contact-drawer__header">
+          <h2 class="apex-contact-drawer__heading">LET'S TALK</h2>
+          <button type="button" class="apex-contact-drawer__close" aria-label="Close">
+            <span>CLOSE</span>
+            <div class="apex-contact-drawer__close-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13 1L1 13M1 1L13 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </button>
+        </div>
+        <div class="apex-contact-drawer__content">
+          <form id="apex-contact-form" class="apex-contact-drawer__form" action="https://formspree.io/f/xeejjnag" method="POST">
+            <div class="apex-contact-drawer__field">
+              <label for="apex-name">NAME</label>
+              <input type="text" id="apex-name" name="name" required>
+            </div>
+            <div class="apex-contact-drawer__field">
+              <label for="apex-phone">PHONE</label>
+              <input type="tel" id="apex-phone" name="phone" required>
+            </div>
+            <div class="apex-contact-drawer__field">
+              <label for="apex-email">EMAIL</label>
+              <input type="email" id="apex-email" name="email" required>
+            </div>
+            <div class="apex-contact-drawer__field">
+              <label for="apex-team">TEAM</label>
+              <input type="text" id="apex-team" name="team" required>
+            </div>
+            <div class="apex-contact-drawer__field">
+              <label for="apex-subject">SUBJECT</label>
+              <input type="text" id="apex-subject" name="subject" required>
+            </div>
+            <div class="apex-contact-drawer__field">
+              <label for="apex-message">MESSAGE</label>
+              <textarea id="apex-message" name="message" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="apex-contact-drawer__submit" id="apex-contact-form-button">
+              <span>SUBMIT</span>
+              <div class="apex-contact-drawer__submit-icon">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </button>
+            <p id="apex-contact-form-status" class="apex-contact-drawer__status"></p>
+            <div class="apex-contact-drawer__social">
+              <a href="#" class="apex-contact-drawer__social-link youtube">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                </svg>
+              </a>
+              <a href="#" class="apex-contact-drawer__social-link instagram">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    `;
+    
+    return drawer;
+  }
+
+  function injectDrawerNow() {
+    if (document.querySelector('#apex-contact-drawer')) {
+      return true; // Already exists
+    }
+
+    if (!document.body) {
+      return false; // Body not ready
+    }
+
+    try {
+      const drawer = createDrawerElement();
+      document.body.appendChild(drawer);
+      console.log('Apex Header: Drawer injected via standalone function');
+      reInjectionAttempts = 0; // Reset counter on successful injection
+      return true;
+    } catch (error) {
+      console.error('Apex Header: Failed to inject drawer via standalone function', error);
+      return false;
+    }
+  }
+
+  function setupDrawerObserver() {
+    if (drawerObserver) {
+      return; // Already set up
+    }
+
+    if (!document.body) {
+      return; // Can't observe without body
+    }
+
+    try {
+      drawerObserver = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+          if (mutation.type === 'childList' && mutation.removedNodes.length > 0) {
+            for (const node of mutation.removedNodes) {
+              // Check if removed node is drawer or contains drawer
+              if (node.id === 'apex-contact-drawer' || 
+                  (node.querySelector && node.querySelector('#apex-contact-drawer'))) {
+                console.warn('Apex Header: Drawer was removed from DOM, re-injecting...');
+                reInjectionAttempts++;
+                if (reInjectionAttempts <= MAX_REINJECTION_ATTEMPTS) {
+                  setTimeout(() => {
+                    injectDrawerNow();
+                  }, 100 * reInjectionAttempts); // Exponential backoff
+                } else {
+                  console.error('Apex Header: Max re-injection attempts reached');
+                }
+                break;
+              }
+            }
+          }
+        }
+      });
+
+      drawerObserver.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+
+      console.log('Apex Header: Drawer observer set up');
+    } catch (error) {
+      console.error('Apex Header: Failed to set up drawer observer', error);
+    }
+  }
+
+  function ensureDrawerExists() {
+    // Try to inject immediately
+    if (injectDrawerNow()) {
+      setupDrawerObserver();
+      return;
+    }
+
+    // If body doesn't exist, wait for it
+    if (!document.body) {
+      const checkBody = setInterval(() => {
+        if (document.body) {
+          clearInterval(checkBody);
+          if (injectDrawerNow()) {
+            setupDrawerObserver();
+          }
+        }
+      }, 10);
+
+      setTimeout(() => {
+        clearInterval(checkBody);
+        if (document.body && injectDrawerNow()) {
+          setupDrawerObserver();
+        }
+      }, 5000);
+      return;
+    }
+
+    // Body exists but injection failed - try again
+    setTimeout(() => {
+      if (injectDrawerNow()) {
+        setupDrawerObserver();
+      }
+    }, 100);
+  }
+
+  // Execute immediately when script loads
+  ensureDrawerExists();
+
+  // Also try after DOMContentLoaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', ensureDrawerExists);
+  } else {
+    ensureDrawerExists();
+  }
+
+  // ============================================
   // CONFIGURATION - Edit your menu items here
   // ============================================
 
@@ -600,6 +793,8 @@
     }
 
     init() {
+      console.log('Apex Header: This is the latest version');
+      ensureDrawerExists(); // Call standalone function first
       this.injectHTML();
       this.injectDrawerDirectly(); // Direct injection immediately
       this.cacheElements();
@@ -610,10 +805,12 @@
 
       // Backup injections at intervals
       setTimeout(() => {
+        ensureDrawerExists();
         this.injectDrawerDirectly();
       }, 500);
 
       setTimeout(() => {
+        ensureDrawerExists();
         this.injectDrawerDirectly();
       }, 2000);
     }
@@ -867,132 +1064,160 @@
         return;
       }
 
-      // Complete drawer HTML as string constant - extracted from getHeaderHTML()
-      const drawerHTML = `
-    <div id="apex-contact-drawer" class="apex-contact-drawer">
-      <div class="apex-contact-drawer__overlay"></div>
-      <div class="apex-contact-drawer__container">
-        <div class="apex-contact-drawer__header">
-          <h2 class="apex-contact-drawer__heading">LET'S TALK</h2>
-          <button type="button" class="apex-contact-drawer__close" aria-label="Close">
-            <span>CLOSE</span>
-            <div class="apex-contact-drawer__close-icon">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M13 1L1 13M1 1L13 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-          </button>
-        </div>
-        <div class="apex-contact-drawer__content">
-          <form id="apex-contact-form" class="apex-contact-drawer__form" action="https://formspree.io/f/xeejjnag" method="POST">
-            <div class="apex-contact-drawer__field">
-              <label for="apex-name">NAME</label>
-              <input type="text" id="apex-name" name="name" required>
-            </div>
-            <div class="apex-contact-drawer__field">
-              <label for="apex-phone">PHONE</label>
-              <input type="tel" id="apex-phone" name="phone" required>
-            </div>
-            <div class="apex-contact-drawer__field">
-              <label for="apex-email">EMAIL</label>
-              <input type="email" id="apex-email" name="email" required>
-            </div>
-            <div class="apex-contact-drawer__field">
-              <label for="apex-team">TEAM</label>
-              <input type="text" id="apex-team" name="team" required>
-            </div>
-            <div class="apex-contact-drawer__field">
-              <label for="apex-subject">SUBJECT</label>
-              <input type="text" id="apex-subject" name="subject" required>
-            </div>
-            <div class="apex-contact-drawer__field">
-              <label for="apex-message">MESSAGE</label>
-              <textarea id="apex-message" name="message" rows="5" required></textarea>
-            </div>
-            <button type="submit" class="apex-contact-drawer__submit" id="apex-contact-form-button">
-              <span>SUBMIT</span>
-              <div class="apex-contact-drawer__submit-icon">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
-            </button>
-            <p id="apex-contact-form-status" class="apex-contact-drawer__status"></p>
-            <div class="apex-contact-drawer__social">
-              <a href="#" class="apex-contact-drawer__social-link youtube">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
-                </svg>
-              </a>
-              <a href="#" class="apex-contact-drawer__social-link instagram">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                </svg>
-              </a>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>`;
-
+      // Use DOM element creation instead of HTML string
       if (!document.body) {
         console.warn('Apex Header: Cannot inject drawer directly - body not ready');
         return;
       }
 
       try {
-        let injected = false;
-
-        // Strategy 1: Inject at end of body
-        try {
-          document.body.insertAdjacentHTML('beforeend', drawerHTML);
-          console.log('Apex Header: Drawer injected directly at end of body');
-          injected = true;
-        } catch (e) {
-          console.error('Apex Header: Failed to inject at end of body', e);
-        }
-
-        // Strategy 2: Try after spacer if exists
-        if (!injected || !document.querySelector('#apex-contact-drawer')) {
-          const spacer = document.querySelector('.apex-header-spacer');
-          if (spacer) {
-            try {
-              spacer.insertAdjacentHTML('afterend', drawerHTML);
-              console.log('Apex Header: Drawer injected directly after spacer');
-              injected = true;
-            } catch (e) {
-              console.error('Apex Header: Failed to inject after spacer', e);
-            }
-          }
-        }
-
-        // Strategy 3: DOM element creation if HTML injection failed
-        if (!document.querySelector('#apex-contact-drawer')) {
-          try {
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = drawerHTML.trim();
-            const drawerEl = tempDiv.firstElementChild;
-            if (drawerEl && drawerEl.id === 'apex-contact-drawer') {
-              document.body.appendChild(drawerEl);
-              console.log('Apex Header: Drawer created via DOM manipulation');
-              injected = true;
-            }
-          } catch (e) {
-            console.error('Apex Header: Failed to create drawer via DOM', e);
-          }
-        }
-
+        // Create drawer element using DOM API
+        const drawer = document.createElement('div');
+        drawer.id = 'apex-contact-drawer';
+        drawer.className = 'apex-contact-drawer';
+        
+        // Create overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'apex-contact-drawer__overlay';
+        
+        // Create container
+        const container = document.createElement('div');
+        container.className = 'apex-contact-drawer__container';
+        
+        // Create header
+        const header = document.createElement('div');
+        header.className = 'apex-contact-drawer__header';
+        
+        const heading = document.createElement('h2');
+        heading.className = 'apex-contact-drawer__heading';
+        heading.textContent = "LET'S TALK";
+        
+        const closeBtn = document.createElement('button');
+        closeBtn.type = 'button';
+        closeBtn.className = 'apex-contact-drawer__close';
+        closeBtn.setAttribute('aria-label', 'Close');
+        
+        const closeSpan = document.createElement('span');
+        closeSpan.textContent = 'CLOSE';
+        
+        const closeIcon = document.createElement('div');
+        closeIcon.className = 'apex-contact-drawer__close-icon';
+        closeIcon.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 1L1 13M1 1L13 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        
+        closeBtn.appendChild(closeSpan);
+        closeBtn.appendChild(closeIcon);
+        header.appendChild(heading);
+        header.appendChild(closeBtn);
+        
+        // Create content with form
+        const content = document.createElement('div');
+        content.className = 'apex-contact-drawer__content';
+        
+        const form = document.createElement('form');
+        form.id = 'apex-contact-form';
+        form.className = 'apex-contact-drawer__form';
+        form.action = 'https://formspree.io/f/xeejjnag';
+        form.method = 'POST';
+        
+        // Form fields
+        const fields = [
+          { id: 'apex-name', name: 'name', label: 'NAME', type: 'text' },
+          { id: 'apex-phone', name: 'phone', label: 'PHONE', type: 'tel' },
+          { id: 'apex-email', name: 'email', label: 'EMAIL', type: 'email' },
+          { id: 'apex-team', name: 'team', label: 'TEAM', type: 'text' },
+          { id: 'apex-subject', name: 'subject', label: 'SUBJECT', type: 'text' }
+        ];
+        
+        fields.forEach(field => {
+          const fieldDiv = document.createElement('div');
+          fieldDiv.className = 'apex-contact-drawer__field';
+          
+          const label = document.createElement('label');
+          label.setAttribute('for', field.id);
+          label.textContent = field.label;
+          
+          const input = document.createElement('input');
+          input.type = field.type;
+          input.id = field.id;
+          input.name = field.name;
+          input.required = true;
+          
+          fieldDiv.appendChild(label);
+          fieldDiv.appendChild(input);
+          form.appendChild(fieldDiv);
+        });
+        
+        // Message textarea
+        const messageField = document.createElement('div');
+        messageField.className = 'apex-contact-drawer__field';
+        const messageLabel = document.createElement('label');
+        messageLabel.setAttribute('for', 'apex-message');
+        messageLabel.textContent = 'MESSAGE';
+        const textarea = document.createElement('textarea');
+        textarea.id = 'apex-message';
+        textarea.name = 'message';
+        textarea.rows = 5;
+        textarea.required = true;
+        messageField.appendChild(messageLabel);
+        messageField.appendChild(textarea);
+        form.appendChild(messageField);
+        
+        // Submit button
+        const submitBtn = document.createElement('button');
+        submitBtn.type = 'submit';
+        submitBtn.className = 'apex-contact-drawer__submit';
+        submitBtn.id = 'apex-contact-form-button';
+        const submitSpan = document.createElement('span');
+        submitSpan.textContent = 'SUBMIT';
+        const submitIcon = document.createElement('div');
+        submitIcon.className = 'apex-contact-drawer__submit-icon';
+        submitIcon.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        submitBtn.appendChild(submitSpan);
+        submitBtn.appendChild(submitIcon);
+        form.appendChild(submitBtn);
+        
+        // Status message
+        const status = document.createElement('p');
+        status.id = 'apex-contact-form-status';
+        status.className = 'apex-contact-drawer__status';
+        form.appendChild(status);
+        
+        // Social links
+        const social = document.createElement('div');
+        social.className = 'apex-contact-drawer__social';
+        const youtubeLink = document.createElement('a');
+        youtubeLink.href = '#';
+        youtubeLink.className = 'apex-contact-drawer__social-link youtube';
+        youtubeLink.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>';
+        const instagramLink = document.createElement('a');
+        instagramLink.href = '#';
+        instagramLink.className = 'apex-contact-drawer__social-link instagram';
+        instagramLink.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>';
+        social.appendChild(youtubeLink);
+        social.appendChild(instagramLink);
+        form.appendChild(social);
+        
+        content.appendChild(form);
+        container.appendChild(header);
+        container.appendChild(content);
+        drawer.appendChild(overlay);
+        drawer.appendChild(container);
+        
+        // Append to body
+        document.body.appendChild(drawer);
+        console.log('Apex Header: Drawer created via DOM API and appended to body');
+        
         // Verify injection
         setTimeout(() => {
-          const drawer = document.querySelector('#apex-contact-drawer');
-          if (drawer) {
-            console.log('Apex Header: Drawer verified after direct injection');
+          const drawerEl = document.querySelector('#apex-contact-drawer');
+          if (drawerEl) {
+            console.log('Apex Header: Drawer verified after DOM creation');
             // Re-initialize drawer if needed
             if (window.ApexHeader && !window.ApexHeader.contactDrawer) {
               window.ApexHeader.initContactDrawer();
             }
           } else {
-            console.error('Apex Header: Drawer still not found after direct injection attempts');
+            console.error('Apex Header: Drawer still not found after DOM creation');
           }
         }, 100);
 
