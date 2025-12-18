@@ -55,7 +55,7 @@ const cssInsert = `  // ============================================
 
   function injectStyles() {
     if (document.getElementById('apex-header-styles')) return;
-    
+
     // Wait for head to exist
     if (!document.head) {
       const checkHead = setInterval(() => {
@@ -64,7 +64,7 @@ const cssInsert = `  // ============================================
           doInjectStyles();
         }
       }, 10);
-      
+
       setTimeout(() => {
         clearInterval(checkHead);
         if (document.head) {
@@ -75,7 +75,7 @@ const cssInsert = `  // ============================================
       }, 5000);
       return;
     }
-    
+
     doInjectStyles();
   }
 
