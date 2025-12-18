@@ -1023,9 +1023,18 @@
   // ============================================
 
   function initApexHeader() {
+    console.log('Apex Header: initApexHeader called', {
+      readyState: document.readyState,
+      bodyExists: !!document.body,
+      url: window.location.href
+    });
+    
     try {
       // Check if header should be shown on this URL
-      if (!shouldShowHeader()) {
+      const shouldShow = shouldShowHeader();
+      console.log('Apex Header: shouldShowHeader() =', shouldShow);
+      
+      if (!shouldShow) {
         console.log('Apex Header: Hidden on this domain');
         // Still create a minimal instance for API access
         window.ApexHeader = {
@@ -1033,12 +1042,14 @@
           hidden: true,
           updateCartCount: () => console.warn('Apex Header: Hidden on this domain')
         };
+        console.log('Apex Header: Fallback object set (hidden)');
         return;
       }
 
       // Create instance and expose to window
+      console.log('Apex Header: Creating ApexHeader instance...');
       window.ApexHeader = new ApexHeader();
-      console.log('Apex Header: Initialized successfully');
+      console.log('Apex Header: Initialized successfully', window.ApexHeader);
 
       // Convenience methods
       window.updateApexCartCount = (count) => {
@@ -1052,8 +1063,10 @@
       window.ApexHeader = {
         initialized: false,
         error: error.message,
+        stack: error.stack,
         updateCartCount: () => console.warn('Apex Header: Not initialized')
       };
+      console.log('Apex Header: Fallback object set (error)', window.ApexHeader);
     }
   }
 
