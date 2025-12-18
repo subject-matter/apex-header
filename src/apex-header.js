@@ -249,11 +249,9 @@
     return CONFIG.actions.map(action => {
       const className = forMobile ? 'apex-mobile-drawer__footer-link' : 'apex-header__action-link';
       const desktopOnly = forMobile ? '' : 'data-desktop-only';
-      // Add infodot-btn class to contact button
-      const extraClass = action.action === 'contact' ? ' infodot-btn' : '';
 
       if (action.type === 'button') {
-        return `<button type="button" class="${className}${extraClass}" data-action="${action.action}" ${desktopOnly}>${action.label}</button>`;
+        return `<button type="button" class="${className}" data-action="${action.action}" ${desktopOnly}>${action.label}</button>`;
       }
       return `<a href="${action.href}" class="${className}" ${desktopOnly}>${action.label}</a>`;
     }).join('');
