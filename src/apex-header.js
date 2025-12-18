@@ -542,21 +542,31 @@
     }
 
     open() {
+      if (!this.element) {
+        console.error('Apex Header: Contact drawer element is null');
+        return;
+      }
+      
       // Show submit button in case it was hidden from a previous submission
       const submitButton = this.form?.querySelector('#apex-contact-form-button');
       if (submitButton) {
         submitButton.style.display = '';
       }
-
+      
       // Clear any previous status messages
       if (this.status) {
         this.status.textContent = '';
         this.status.className = 'apex-contact-drawer__status';
       }
-
+      
+      // Ensure element is visible and positioned correctly
+      this.element.style.display = 'flex';
+      
       // Add active class to trigger slide-in animation
       this.element.classList.add('is-active');
       document.body.style.overflow = 'hidden';
+      
+      console.log('Apex Header: Contact drawer opened', this.element);
     }
 
     close() {
@@ -850,17 +860,30 @@
         // Ensure contact drawer element exists and is initialized
         if (!this.contactDrawerElement) {
           this.contactDrawerElement = document.querySelector('#apex-contact-drawer');
+          console.log('Apex Header: Contact drawer element found:', this.contactDrawerElement);
         }
-
-        if (!this.contactDrawer && this.contactDrawerElement) {
-          this.contactDrawer = new ContactDrawer(this.contactDrawerElement);
+        
+        if (!this.contactDrawer) {
+          if (this.contactDrawerElement) {
+            this.contactDrawer = new ContactDrawer(this.contactDrawerElement);
+            console.log('Apex Header: Contact drawer initialized');
+          } else {
+            console.error('Apex Header: Contact drawer element not found in DOM');
+            // Try to find it one more time
+            const drawerEl = document.querySelector('#apex-contact-drawer');
+            if (drawerEl) {
+              this.contactDrawerElement = drawerEl;
+              this.contactDrawer = new ContactDrawer(drawerEl);
+              console.log('Apex Header: Contact drawer found and initialized on retry');
+            }
+          }
         }
 
         // Open internal contact drawer
         if (this.contactDrawer) {
           this.contactDrawer.open();
         } else {
-          console.error('Apex Header: Contact drawer not initialized');
+          console.error('Apex Header: Contact drawer not initialized. Element:', this.contactDrawerElement);
         }
       }
 
