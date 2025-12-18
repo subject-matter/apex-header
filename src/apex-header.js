@@ -1066,3 +1066,16 @@
 
 })();
 
+// Safety fallback: Ensure window.ApexHeader exists even if IIFE fails
+(function() {
+  'use strict';
+  if (!window.ApexHeader) {
+    console.warn('Apex Header: IIFE may have failed, creating fallback');
+    window.ApexHeader = {
+      initialized: false,
+      error: 'Initialization may have failed',
+      updateCartCount: () => console.warn('Apex Header: Not initialized')
+    };
+  }
+})();
+
