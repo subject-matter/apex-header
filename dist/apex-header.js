@@ -567,26 +567,26 @@
         console.error('Apex Header: Contact drawer element is null');
         return;
       }
-      
+
       // Show submit button in case it was hidden from a previous submission
       const submitButton = this.form?.querySelector('#apex-contact-form-button');
       if (submitButton) {
         submitButton.style.display = '';
       }
-      
+
       // Clear any previous status messages
       if (this.status) {
         this.status.textContent = '';
         this.status.className = 'apex-contact-drawer__status';
       }
-      
+
       // Ensure element is visible and positioned correctly
       this.element.style.display = 'flex';
-      
+
       // Add active class to trigger slide-in animation
       this.element.classList.add('is-active');
       document.body.style.overflow = 'hidden';
-      
+
       console.log('Apex Header: Contact drawer opened', this.element);
     }
 
@@ -648,8 +648,70 @@
     }
 
     injectHTML() {
+      // Wait for body to exist (Shopify sometimes loads scripts before body)
+      if (!document.body) {
+        const checkBody = setInterval(() => {
+          if (document.body) {
+            clearInterval(checkBody);
+            this.doInjectHTML();
+          }
+        }, 10);
+        
+        // Fallback timeout
+        setTimeout(() => {
+          clearInterval(checkBody);
+          if (document.body) {
+            this.doInjectHTML();
+          } else {
+            console.error('Apex Header: Body element not found after timeout');
+          }
+        }, 5000);
+      } else {
+        // Body exists, inject immediately
+        this.doInjectHTML();
+      }
+    }
+    
+    doInjectHTML() {
       // Insert at the beginning of body
-      document.body.insertAdjacentHTML('afterbegin', getHeaderHTML());
+      const html = getHeaderHTML();
+      document.body.insertAdjacentHTML('afterbegin', html);
+      
+      // Verify drawer was injected (Shopify sometimes strips elements)
+      setTimeout(() => {
+        const drawer = document.querySelector('#apex-contact-drawer');
+        if (!drawer) {
+          console.warn('Apex Header: Drawer not found after injection, attempting to inject manually...');
+          // Try to inject drawer after spacer
+          const spacer = document.querySelector('.apex-header-spacer');
+          if (spacer) {
+            // Extract drawer HTML - everything after the spacer closing tag
+            const spacerIndex = html.indexOf('apex-header-spacer</div>');
+            if (spacerIndex !== -1) {
+              const drawerHTML = html.substring(spacerIndex + 'apex-header-spacer</div>'.length).trim();
+              // Remove the closing backtick if present
+              const cleanDrawerHTML = drawerHTML.replace(/`\s*$/, '');
+              if (cleanDrawerHTML) {
+                spacer.insertAdjacentHTML('afterend', cleanDrawerHTML);
+                console.log('Apex Header: Drawer manually injected after spacer');
+              }
+            }
+          } else {
+            // Last resort: inject drawer HTML directly
+            const drawerStart = html.indexOf('<div id="apex-contact-drawer"');
+            if (drawerStart !== -1) {
+              const drawerEnd = html.lastIndexOf('</div>', html.length - 10);
+              if (drawerEnd !== -1) {
+                const drawerHTML = html.substring(drawerStart, drawerEnd + 6);
+                document.body.insertAdjacentHTML('beforeend', drawerHTML);
+                console.log('Apex Header: Drawer manually injected at end of body');
+              }
+            }
+          }
+        } else {
+          console.log('Apex Header: Drawer successfully injected');
+        }
+      }, 100);
     }
 
     cacheElements() {
@@ -883,7 +945,7 @@
           this.contactDrawerElement = document.querySelector('#apex-contact-drawer');
           console.log('Apex Header: Contact drawer element found:', this.contactDrawerElement);
         }
-        
+
         if (!this.contactDrawer) {
           if (this.contactDrawerElement) {
             this.contactDrawer = new ContactDrawer(this.contactDrawerElement);
