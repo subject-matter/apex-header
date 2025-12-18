@@ -599,8 +599,20 @@
     }
 
     initContactDrawer() {
+      // Find contact drawer element (should exist after injectHTML)
+      this.contactDrawerElement = document.querySelector('#apex-contact-drawer');
       if (this.contactDrawerElement) {
         this.contactDrawer = new ContactDrawer(this.contactDrawerElement);
+      } else {
+        // Retry after a short delay for Shopify/async loading scenarios
+        setTimeout(() => {
+          this.contactDrawerElement = document.querySelector('#apex-contact-drawer');
+          if (this.contactDrawerElement) {
+            this.contactDrawer = new ContactDrawer(this.contactDrawerElement);
+          } else {
+            console.warn('Apex Header: Contact drawer element not found');
+          }
+        }, 100);
       }
     }
 
@@ -619,7 +631,7 @@
       this.cartCount = document.querySelectorAll('.js-cart-count');
       this.cartButtons = document.querySelectorAll('.js-cart');
       this.actionButtons = document.querySelectorAll('[data-action]');
-      this.contactDrawerElement = document.querySelector('#apex-contact-drawer');
+      // Contact drawer will be cached in initContactDrawer
     }
 
     bindEvents() {
@@ -835,9 +847,20 @@
           cartDrawer.close();
         }
 
+        // Ensure contact drawer element exists and is initialized
+        if (!this.contactDrawerElement) {
+          this.contactDrawerElement = document.querySelector('#apex-contact-drawer');
+        }
+        
+        if (!this.contactDrawer && this.contactDrawerElement) {
+          this.contactDrawer = new ContactDrawer(this.contactDrawerElement);
+        }
+
         // Open internal contact drawer
         if (this.contactDrawer) {
           this.contactDrawer.open();
+        } else {
+          console.error('Apex Header: Contact drawer not initialized');
         }
       }
 

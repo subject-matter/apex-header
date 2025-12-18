@@ -1045,6 +1045,7 @@ contact-drawer .drawer {
 
 @media screen and (max-width: 989px) {
   .apex-contact-drawer__container {
+    width: 100%;
     max-width: 100%;
     padding: 2rem;
   }
