@@ -4,7 +4,8 @@
   "description": "Lightweight, self-injecting header component for Apex One websites",
   "main": "dist/apex-header.js",
   "scripts": {
-    "build": "npx terser dist/apex-header.js -c -m -o dist/apex-header.min.js",
+    "build:css": "node build.js",
+    "build": "npm run build:css && npx terser dist/apex-header.js -c -m -o dist/apex-header.min.js",
     "serve": "python3 -m http.server 8080"
   },
   "keywords": ["header", "navigation", "apex-one"],

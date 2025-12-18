@@ -612,17 +612,39 @@
       // Find contact drawer element (should exist after injectHTML)
       this.contactDrawerElement = document.querySelector('#apex-contact-drawer');
       if (this.contactDrawerElement) {
-        this.contactDrawer = new ContactDrawer(this.contactDrawerElement);
+        try {
+          this.contactDrawer = new ContactDrawer(this.contactDrawerElement);
+          console.log('Apex Header: Contact drawer initialized');
+        } catch (error) {
+          console.error('Apex Header: Failed to initialize contact drawer', error);
+        }
       } else {
         // Retry after a short delay for Shopify/async loading scenarios
         setTimeout(() => {
           this.contactDrawerElement = document.querySelector('#apex-contact-drawer');
           if (this.contactDrawerElement) {
-            this.contactDrawer = new ContactDrawer(this.contactDrawerElement);
+            try {
+              this.contactDrawer = new ContactDrawer(this.contactDrawerElement);
+              console.log('Apex Header: Contact drawer initialized on retry');
+            } catch (error) {
+              console.error('Apex Header: Failed to initialize contact drawer on retry', error);
+            }
           } else {
-            console.warn('Apex Header: Contact drawer element not found');
+            console.warn('Apex Header: Contact drawer element not found after retry');
+            // Try one more time after longer delay
+            setTimeout(() => {
+              this.contactDrawerElement = document.querySelector('#apex-contact-drawer');
+              if (this.contactDrawerElement) {
+                try {
+                  this.contactDrawer = new ContactDrawer(this.contactDrawerElement);
+                  console.log('Apex Header: Contact drawer initialized on second retry');
+                } catch (error) {
+                  console.error('Apex Header: Failed to initialize contact drawer on second retry', error);
+                }
+              }
+            }, 500);
           }
-        }, 100);
+        }, 200);
       }
     }
 
@@ -652,20 +674,31 @@
     }
 
     doInjectHTML() {
-      // Insert at the beginning of body
-      const html = getHeaderHTML();
-      document.body.insertAdjacentHTML('afterbegin', html);
+      try {
+        // Insert at the beginning of body
+        const html = getHeaderHTML();
+        document.body.insertAdjacentHTML('afterbegin', html);
+        console.log('Apex Header: HTML injected into body');
 
-      // Verify drawer was injected (Shopify sometimes strips elements)
-      setTimeout(() => {
-        const drawer = document.querySelector('#apex-contact-drawer');
-        if (!drawer) {
-          console.warn('Apex Header: Drawer not found after injection, attempting to inject manually...');
-          this.injectDrawerManually(html);
-        } else {
-          console.log('Apex Header: Drawer successfully injected');
-        }
-      }, 100);
+        // Verify drawer was injected (Shopify sometimes strips elements)
+        setTimeout(() => {
+          const drawer = document.querySelector('#apex-contact-drawer');
+          if (!drawer) {
+            console.warn('Apex Header: Drawer not found after injection, attempting to inject manually...');
+            this.injectDrawerManually(html);
+          } else {
+            console.log('Apex Header: Drawer successfully injected');
+          }
+        }, 100);
+      } catch (error) {
+        console.error('Apex Header: Failed to inject HTML', error);
+        // Retry after a delay
+        setTimeout(() => {
+          if (document.body) {
+            this.doInjectHTML();
+          }
+        }, 500);
+      }
     }
 
     injectDrawerManually(fullHTML) {
@@ -1028,12 +1061,12 @@
       bodyExists: !!document.body,
       url: window.location.href
     });
-    
+
     try {
       // Check if header should be shown on this URL
       const shouldShow = shouldShowHeader();
       console.log('Apex Header: shouldShowHeader() =', shouldShow);
-      
+
       if (!shouldShow) {
         console.log('Apex Header: Hidden on this domain');
         // Still create a minimal instance for API access
