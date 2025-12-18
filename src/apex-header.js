@@ -635,7 +635,7 @@
             this.doInjectHTML();
           }
         }, 10);
-        
+
         // Fallback timeout
         setTimeout(() => {
           clearInterval(checkBody);
@@ -650,7 +650,7 @@
         this.doInjectHTML();
       }
     }
-    
+
     doInjectHTML() {
       // Insert at the beginning of body
       const html = getHeaderHTML();
@@ -661,36 +661,77 @@
         const drawer = document.querySelector('#apex-contact-drawer');
         if (!drawer) {
           console.warn('Apex Header: Drawer not found after injection, attempting to inject manually...');
-          // Try to inject drawer after spacer
-          const spacer = document.querySelector('.apex-header-spacer');
-          if (spacer) {
-            // Extract drawer HTML - everything after the spacer closing tag
-            const spacerIndex = html.indexOf('apex-header-spacer</div>');
-            if (spacerIndex !== -1) {
-              const drawerHTML = html.substring(spacerIndex + 'apex-header-spacer</div>'.length).trim();
-              // Remove the closing backtick if present
-              const cleanDrawerHTML = drawerHTML.replace(/`\s*$/, '');
-              if (cleanDrawerHTML) {
-                spacer.insertAdjacentHTML('afterend', cleanDrawerHTML);
-                console.log('Apex Header: Drawer manually injected after spacer');
-              }
-            }
-          } else {
-            // Last resort: inject drawer HTML directly
-            const drawerStart = html.indexOf('<div id="apex-contact-drawer"');
-            if (drawerStart !== -1) {
-              const drawerEnd = html.lastIndexOf('</div>', html.length - 10);
-              if (drawerEnd !== -1) {
-                const drawerHTML = html.substring(drawerStart, drawerEnd + 6);
-                document.body.insertAdjacentHTML('beforeend', drawerHTML);
-                console.log('Apex Header: Drawer manually injected at end of body');
-              }
-            }
-          }
+          this.injectDrawerManually(html);
         } else {
           console.log('Apex Header: Drawer successfully injected');
         }
       }, 100);
+    }
+    
+    injectDrawerManually(fullHTML) {
+      // Extract drawer HTML from the full HTML string
+      const drawerStart = fullHTML.indexOf('<div id="apex-contact-drawer"');
+      if (drawerStart === -1) {
+        console.error('Apex Header: Drawer HTML not found in generated HTML');
+        return;
+      }
+      
+      // Find the end of the drawer (last </div> before the closing backtick)
+      const htmlBeforeDrawer = fullHTML.substring(0, drawerStart);
+      const htmlAfterDrawer = fullHTML.substring(drawerStart);
+      // Find the matching closing div for the drawer
+      let divCount = 0;
+      let drawerEnd = -1;
+      for (let i = 0; i < htmlAfterDrawer.length; i++) {
+        if (htmlAfterDrawer.substring(i, i + 4) === '<div') {
+          divCount++;
+        } else if (htmlAfterDrawer.substring(i, i + 6) === '</div>') {
+          divCount--;
+          if (divCount === 0) {
+            drawerEnd = i + 6;
+            break;
+          }
+        }
+      }
+      
+      if (drawerEnd === -1) {
+        // Fallback: find last </div> before backtick
+        const lastDivIndex = htmlAfterDrawer.lastIndexOf('</div>');
+        if (lastDivIndex !== -1) {
+          drawerEnd = lastDivIndex + 6;
+        }
+      }
+      
+      if (drawerEnd !== -1) {
+        const drawerHTML = htmlAfterDrawer.substring(0, drawerEnd);
+        
+        // Try to inject after spacer first
+        const spacer = document.querySelector('.apex-header-spacer');
+        if (spacer) {
+          spacer.insertAdjacentHTML('afterend', drawerHTML);
+          console.log('Apex Header: Drawer manually injected after spacer');
+        } else {
+          // Inject at end of body
+          document.body.insertAdjacentHTML('beforeend', drawerHTML);
+          console.log('Apex Header: Drawer manually injected at end of body');
+        }
+        
+        // Verify it was injected
+        setTimeout(() => {
+          const drawer = document.querySelector('#apex-contact-drawer');
+          if (drawer) {
+            console.log('Apex Header: Drawer successfully injected manually');
+            // Re-initialize drawer if needed
+            if (window.ApexHeader && !window.ApexHeader.contactDrawer) {
+              window.ApexHeader.initContactDrawer();
+            }
+          } else {
+            console.error('Apex Header: Failed to inject drawer manually');
+          }
+        }, 50);
+      } else {
+        console.error('Apex Header: Could not extract drawer HTML');
+      }
     }
 
     cacheElements() {
