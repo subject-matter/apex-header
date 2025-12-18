@@ -1022,25 +1022,80 @@
   // INITIALIZATION
   // ============================================
 
+  function initApexHeader() {
+    try {
+      // Check if header should be shown on this URL
+      if (!shouldShowHeader()) {
+        console.log('Apex Header: Hidden on this domain');
+        // Still create a minimal instance for API access
+        window.ApexHeader = {
+          initialized: false,
+          hidden: true,
+          updateCartCount: () => console.warn('Apex Header: Hidden on this domain')
+        };
+        return;
+      }
+
+      // Wait for body if needed
+      if (!document.body) {
+        const checkBody = setInterval(() => {
+          if (document.body) {
+            clearInterval(checkBody);
+            createHeaderInstance();
+          }
+        }, 50);
+        
+        setTimeout(() => {
+          clearInterval(checkBody);
+          if (document.body) {
+            createHeaderInstance();
+          } else {
+            console.warn('Apex Header: Body not found, initializing anyway');
+            createHeaderInstance();
+          }
+        }, 5000);
+        return;
+      }
+
+      createHeaderInstance();
+    } catch (error) {
+      console.error('Apex Header: Initialization error', error);
+      // Create fallback object so window.ApexHeader always exists
+      window.ApexHeader = {
+        initialized: false,
+        error: error.message,
+        updateCartCount: () => console.warn('Apex Header: Not initialized')
+      };
+    }
+  }
+
+  function createHeaderInstance() {
+    try {
+      // Create instance and expose to window
+      window.ApexHeader = new ApexHeader();
+      console.log('Apex Header: Initialized successfully');
+
+      // Convenience methods
+      window.updateApexCartCount = (count) => {
+        if (window.ApexHeader && window.ApexHeader.updateCartCount) {
+          window.ApexHeader.updateCartCount(count);
+        }
+      };
+    } catch (error) {
+      console.error('Apex Header: Failed to create instance', error);
+      window.ApexHeader = {
+        initialized: false,
+        error: error.message,
+        updateCartCount: () => console.warn('Apex Header: Not initialized')
+      };
+    }
+  }
+
   // Wait for DOM
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initApexHeader);
   } else {
     initApexHeader();
-  }
-
-  function initApexHeader() {
-    // Check if header should be shown on this URL
-    if (!shouldShowHeader()) {
-      console.log('Apex Header: Hidden on this domain');
-      return;
-    }
-
-    // Create instance and expose to window
-    window.ApexHeader = new ApexHeader();
-
-    // Convenience methods
-    window.updateApexCartCount = (count) => window.ApexHeader.updateCartCount(count);
   }
 
 })();
