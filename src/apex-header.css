@@ -814,6 +814,7 @@ contact-drawer .drawer {
   visibility: visible;
   pointer-events: auto;
   transition: visibility 0s linear 0s;
+  width: 100%;
 }
 
 .apex-contact-drawer__overlay {

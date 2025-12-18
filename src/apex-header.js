@@ -851,7 +851,7 @@
         if (!this.contactDrawerElement) {
           this.contactDrawerElement = document.querySelector('#apex-contact-drawer');
         }
-        
+
         if (!this.contactDrawer && this.contactDrawerElement) {
           this.contactDrawer = new ContactDrawer(this.contactDrawerElement);
         }
