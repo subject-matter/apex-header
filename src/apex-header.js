@@ -1,6 +1,6 @@
 /**
  * APEX HEADER - Lightweight CDN Component
- * Version: 1.6.0
+ * Version: 1.7.0
  *
  * Self-injecting header component with smooth animations.
  * Just include this script and it handles everything.
@@ -356,7 +356,226 @@
     </div>
 
     <div class="apex-header-spacer"></div>
+
+    <div id="apex-contact-drawer" class="apex-contact-drawer">
+      <div class="apex-contact-drawer__overlay"></div>
+      <div class="apex-contact-drawer__container">
+        <div class="apex-contact-drawer__header">
+          <h2 class="apex-contact-drawer__heading">LET'S TALK</h2>
+          <button type="button" class="apex-contact-drawer__close" aria-label="Close">
+            <span>CLOSE</span>
+            <div class="apex-contact-drawer__close-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13 1L1 13M1 1L13 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </button>
+        </div>
+
+        <div class="apex-contact-drawer__content">
+          <form id="apex-contact-form" class="apex-contact-drawer__form" action="https://formspree.io/f/xeejjnag" method="POST">
+            <div class="apex-contact-drawer__field">
+              <label for="apex-name">NAME</label>
+              <input type="text" id="apex-name" name="name" required>
+            </div>
+
+            <div class="apex-contact-drawer__field">
+              <label for="apex-phone">PHONE</label>
+              <input type="tel" id="apex-phone" name="phone" required>
+            </div>
+
+            <div class="apex-contact-drawer__field">
+              <label for="apex-email">EMAIL</label>
+              <input type="email" id="apex-email" name="email" required>
+            </div>
+
+            <div class="apex-contact-drawer__field">
+              <label for="apex-team">TEAM</label>
+              <input type="text" id="apex-team" name="team" required>
+            </div>
+
+            <div class="apex-contact-drawer__field">
+              <label for="apex-subject">SUBJECT</label>
+              <input type="text" id="apex-subject" name="subject" required>
+            </div>
+
+            <div class="apex-contact-drawer__field">
+              <label for="apex-message">MESSAGE</label>
+              <textarea id="apex-message" name="message" rows="5" required></textarea>
+            </div>
+
+            <button type="submit" class="apex-contact-drawer__submit" id="apex-contact-form-button">
+              <span>SUBMIT</span>
+              <div class="apex-contact-drawer__submit-icon">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </button>
+
+            <p id="apex-contact-form-status" class="apex-contact-drawer__status"></p>
+
+            <div class="apex-contact-drawer__social">
+              <a href="#" class="apex-contact-drawer__social-link youtube">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                </svg>
+              </a>
+              <a href="#" class="apex-contact-drawer__social-link instagram">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   `;
+  }
+
+  // ============================================
+  // CONTACT DRAWER CLASS
+  // ============================================
+
+  class ContactDrawer {
+    constructor(element) {
+      this.element = element;
+      this.bindEvents();
+    }
+
+    bindEvents() {
+      this.closeButton = this.element.querySelector('.apex-contact-drawer__close');
+      this.overlay = this.element.querySelector('.apex-contact-drawer__overlay');
+      this.form = this.element.querySelector('#apex-contact-form');
+      this.status = this.element.querySelector('#apex-contact-form-status');
+
+      if (this.closeButton) {
+        this.closeButton.addEventListener('click', () => this.close());
+      }
+
+      if (this.overlay) {
+        this.overlay.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.close();
+        });
+      }
+
+      document.addEventListener('keyup', (event) => {
+        if (event.key === 'Escape' && this.isOpen()) {
+          this.close();
+        }
+      });
+
+      if (this.form) {
+        this.form.addEventListener('submit', (event) => {
+          this.handleSubmit(event);
+        });
+      }
+    }
+
+    async handleSubmit(event) {
+      event.preventDefault();
+
+      if (!this.status || !this.form) return;
+
+      // Clear previous status
+      this.status.textContent = '';
+      this.status.className = 'apex-contact-drawer__status';
+
+      // Get submit button
+      const submitButton = this.form.querySelector('#apex-contact-form-button');
+      if (!submitButton) return;
+
+      const buttonSpan = submitButton.querySelector('span');
+      const originalButtonText = buttonSpan ? buttonSpan.textContent : 'SUBMIT';
+
+      // Disable submit button
+      submitButton.disabled = true;
+      if (buttonSpan) {
+        buttonSpan.textContent = 'SUBMITTING...';
+      }
+
+      const data = new FormData(event.target);
+
+      try {
+        const response = await fetch(event.target.action, {
+          method: event.target.method || 'POST',
+          body: data,
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          this.status.textContent = 'Thanks for your submission!';
+          this.status.className = 'apex-contact-drawer__status apex-contact-drawer__status--success';
+          this.form.reset();
+
+          // Hide submit button on success
+          if (submitButton) {
+            submitButton.style.display = 'none';
+          }
+
+          // Close drawer after successful submission
+          setTimeout(() => {
+            this.close();
+          }, 2000);
+        } else {
+          const responseData = await response.json();
+          if (responseData.errors && Array.isArray(responseData.errors)) {
+            this.status.textContent = responseData.errors.map(error => error.message || error).join(', ');
+          } else {
+            this.status.textContent = 'Oops! There was a problem submitting your form';
+          }
+          this.status.className = 'apex-contact-drawer__status apex-contact-drawer__status--error';
+        }
+      } catch (error) {
+        console.error('Form submission error:', error);
+        this.status.textContent = 'Oops! There was a problem submitting your form';
+        this.status.className = 'apex-contact-drawer__status apex-contact-drawer__status--error';
+      } finally {
+        // Re-enable submit button
+        submitButton.disabled = false;
+        if (buttonSpan) {
+          buttonSpan.textContent = originalButtonText;
+        }
+      }
+    }
+
+    open() {
+      // Show submit button in case it was hidden from a previous submission
+      const submitButton = this.form?.querySelector('#apex-contact-form-button');
+      if (submitButton) {
+        submitButton.style.display = '';
+      }
+
+      // Clear any previous status messages
+      if (this.status) {
+        this.status.textContent = '';
+        this.status.className = 'apex-contact-drawer__status';
+      }
+
+      // Add active class to trigger slide-in animation
+      this.element.classList.add('is-active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    close() {
+      // Remove active class to trigger slide-out animation
+      this.element.classList.remove('is-active');
+
+      // Wait for transform transition to complete, then restore body overflow
+      setTimeout(() => {
+        if (!this.element.classList.contains('is-active')) {
+          document.body.style.overflow = '';
+        }
+      }, 300); // Match transition duration (0.3s)
+    }
+
+    isOpen() {
+      return this.element.classList.contains('is-active');
+    }
   }
 
   // ============================================
@@ -375,9 +594,16 @@
     init() {
       this.injectHTML();
       this.cacheElements();
+      this.initContactDrawer();
       this.bindEvents();
       this.setupAccessibility();
       this.setupScrollBehavior();
+    }
+
+    initContactDrawer() {
+      if (this.contactDrawerElement) {
+        this.contactDrawer = new ContactDrawer(this.contactDrawerElement);
+      }
     }
 
     injectHTML() {
@@ -395,6 +621,7 @@
       this.cartCount = document.querySelectorAll('.js-cart-count');
       this.cartButtons = document.querySelectorAll('.js-cart');
       this.actionButtons = document.querySelectorAll('[data-action]');
+      this.contactDrawerElement = document.querySelector('#apex-contact-drawer');
     }
 
     bindEvents() {
@@ -516,12 +743,12 @@
       this.mobileToggle?.setAttribute('aria-expanded', 'true');
       this.mobileDrawer?.setAttribute('aria-hidden', 'false');
 
-      // Close any open Shopify drawers
-      const contactDrawer = document.querySelector('contact-drawer');
-      if (contactDrawer && typeof contactDrawer.close === 'function') {
-        contactDrawer.close();
+      // Close contact drawer if open
+      if (this.contactDrawer && this.contactDrawer.isOpen()) {
+        this.contactDrawer.close();
       }
 
+      // Close any open Shopify drawers
       const cartDrawer = document.querySelector('cart-drawer');
       if (cartDrawer && typeof cartDrawer.close === 'function') {
         cartDrawer.close();
@@ -591,9 +818,8 @@
       // Handle cart action - open Shopify cart-drawer
       if (action === 'cart') {
         // Close contact drawer if open
-        const contactDrawer = document.querySelector('contact-drawer');
-        if (contactDrawer && typeof contactDrawer.close === 'function') {
-          contactDrawer.close();
+        if (this.contactDrawer && this.contactDrawer.isOpen()) {
+          this.contactDrawer.close();
         }
 
         // Open Shopify cart drawer
@@ -611,14 +837,10 @@
           cartDrawer.close();
         }
 
-        // Open contact drawer (Shopify custom element)
-        const contactDrawer = document.querySelector('contact-drawer');
-        if (contactDrawer && typeof contactDrawer.open === 'function') {
-          contactDrawer.open();
+        // Open internal contact drawer
+        if (this.contactDrawer) {
+          this.contactDrawer.open();
         }
-
-        // Fallback: add infodot-active class for non-Shopify implementations
-        document.body.classList.add('infodot-active');
       }
 
       // Dispatch custom event for external handling

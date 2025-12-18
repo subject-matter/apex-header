@@ -792,3 +792,265 @@ contact-drawer .drawer {
   z-index: 9001 !important;
 }
 
+/* ============================================
+   CONTACT DRAWER - Internal Component
+   ============================================ */
+
+.apex-contact-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10001;
+  display: flex;
+  justify-content: flex-end;
+  font-family: acumin-pro-wide, sans-serif;
+  pointer-events: none;
+  visibility: hidden;
+  transition: visibility 0s linear 0.3s;
+}
+
+.apex-contact-drawer.is-active {
+  visibility: visible;
+  pointer-events: auto;
+  transition: visibility 0s linear 0s;
+}
+
+.apex-contact-drawer__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+  cursor: pointer;
+}
+
+.apex-contact-drawer.is-active .apex-contact-drawer__overlay {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease, visibility 0s linear 0s;
+}
+
+.apex-contact-drawer__container {
+  position: relative;
+  width: 755px;
+  max-width: 755px;
+  background: var(--apex-gold);
+  height: 100%;
+  padding: 3rem;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+}
+
+.apex-contact-drawer.is-active .apex-contact-drawer__container {
+  transform: translateX(0);
+}
+
+.apex-contact-drawer__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 3rem;
+}
+
+.apex-contact-drawer__heading {
+  color: #000;
+  font-family: acumin-pro-wide, sans-serif;
+  letter-spacing: -.04em;
+  font-size: 48px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.apex-contact-drawer__close {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #000;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: acumin-pro-wide, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: -.04em;
+}
+
+.apex-contact-drawer__close-icon {
+  width: 40px;
+  height: 40px;
+  background: #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.apex-contact-drawer__close-icon svg {
+  color: var(--apex-gold);
+}
+
+.apex-contact-drawer__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.apex-contact-drawer__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.apex-contact-drawer__field label {
+  color: #000;
+  font-family: acumin-pro-wide, sans-serif;
+  letter-spacing: -.04em;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.apex-contact-drawer__field input,
+.apex-contact-drawer__field textarea {
+  background: transparent;
+  border: 1px solid #000;
+  border-radius: 0;
+  padding: 0.75rem;
+  color: #000;
+  font-family: acumin-pro-wide, sans-serif;
+  font-size: 16px;
+}
+
+.apex-contact-drawer__field input:focus,
+.apex-contact-drawer__field textarea:focus {
+  outline: none;
+  border-color: #000;
+}
+
+.apex-contact-drawer__submit {
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 100px;
+  padding: 0;
+  font-family: acumin-pro-wide, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: -.04em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  width: 150px;
+  margin-top: 2rem;
+}
+
+.apex-contact-drawer__submit:hover {
+  background: #fff;
+  color: #000;
+  width: 160px;
+}
+
+.apex-contact-drawer__submit:hover .apex-contact-drawer__submit-icon {
+  background: #000;
+  color: #fff;
+  transform: translateX(10px);
+}
+
+.apex-contact-drawer__submit:hover .apex-contact-drawer__submit-icon svg {
+  color: #fff;
+}
+
+.apex-contact-drawer__submit span {
+  padding: 16px 24px;
+}
+
+.apex-contact-drawer__submit-icon {
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 4px;
+  transition: all 0.2s ease;
+}
+
+.apex-contact-drawer__submit-icon svg {
+  color: #000;
+  transform: scale(1.2);
+  transition: all 0.2s ease;
+}
+
+.apex-contact-drawer__status {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  font-family: acumin-pro-wide, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -.02em;
+  color: #000;
+  min-height: 20px;
+}
+
+.apex-contact-drawer__status--success {
+  color: #000;
+  background: rgba(0, 0, 0, 0.05);
+  border-left: 3px solid #000;
+}
+
+.apex-contact-drawer__status--error {
+  color: #000;
+  background: rgba(0, 0, 0, 0.05);
+  border-left: 3px solid #000;
+}
+
+.apex-contact-drawer__submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.apex-contact-drawer__submit:disabled:hover {
+  width: 150px;
+  background: #000;
+  color: #fff;
+}
+
+.apex-contact-drawer__submit:disabled:hover .apex-contact-drawer__submit-icon {
+  transform: translateX(0);
+  background: #fff;
+}
+
+.apex-contact-drawer__social {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.apex-contact-drawer__social-link {
+  color: #000;
+  transition: opacity 0.2s ease;
+}
+
+.apex-contact-drawer__social-link:hover {
+  opacity: 0.7;
+}
+
+@media screen and (max-width: 989px) {
+  .apex-contact-drawer__container {
+    max-width: 100%;
+    padding: 2rem;
+  }
+
+  .apex-contact-drawer__heading {
+    font-size: 36px;
+  }
+}
+

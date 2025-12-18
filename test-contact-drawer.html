@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Contact Drawer - Apex Header</title>
+
+  <!-- Adobe Fonts - Acumin Pro Wide -->
+  <link rel="stylesheet" href="https://use.typekit.net/vcc1zlh.css">
+
+  <!-- Load CSS directly from source -->
+  <link rel="stylesheet" href="src/apex-header.css">
+
+  <style>
+    /* Page styles - NOT part of the header component */
+    body {
+      margin: 0;
+      padding: 0;
+      background: #1E1E1E;
+      color: #A8A08B;
+      font-family: 'acumin-pro-wide', -apple-system, sans-serif;
+      min-height: 200vh; /* Scrollable */
+    }
+
+    .demo-content {
+      padding: 40px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      color: #E6E6E6;
+      font-size: 48px;
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+
+    h2 {
+      color: #E6E6E6;
+      font-size: 24px;
+      margin: 40px 0 16px;
+      font-weight: 700;
+    }
+
+    p {
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .test-info {
+      background: rgba(168, 160, 139, 0.1);
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      border-left: 4px solid var(--apex-gold);
+    }
+
+    .test-info strong {
+      color: var(--apex-gold);
+    }
+  </style>
+</head>
+<body>
+
+  <!--
+    =====================================================
+    APEX HEADER - Load from source for testing
+    =====================================================
+  -->
+  <script src="src/apex-header.js"></script>
+
+  <!-- Your page content goes here -->
+  <div class="demo-content">
+    <h1>Contact Drawer Test</h1>
+
+    <div class="test-info">
+      <strong>Testing:</strong> Click the "CONTACT" button in the header to open the integrated contact drawer.
+      <br><br>
+      The drawer should:
+      <ul style="margin-left: 20px; margin-top: 10px;">
+        <li>Slide in from the right</li>
+        <li>Show a gold background</li>
+        <li>Display the contact form</li>
+        <li>Close when clicking the overlay, close button, or pressing Escape</li>
+      </ul>
+    </div>
+
+    <h2>Test Instructions</h2>
+    <p>
+      1. Look at the header at the top of the page<br>
+      2. Click the "CONTACT" button (desktop) or open mobile menu and click "CONTACT" (mobile)<br>
+      3. The contact drawer should slide in from the right<br>
+      4. Try closing it using:
+      <ul style="margin-left: 20px;">
+        <li>The "CLOSE" button</li>
+        <li>Clicking the dark overlay</li>
+        <li>Pressing the Escape key</li>
+      </ul>
+    </p>
+
+    <h2>Form Fields</h2>
+    <p>The drawer includes these form fields:</p>
+    <ul style="margin-left: 20px;">
+      <li>NAME</li>
+      <li>PHONE</li>
+      <li>EMAIL</li>
+      <li>TEAM</li>
+      <li>SUBJECT</li>
+      <li>MESSAGE</li>
+    </ul>
+
+    <h2>Console Logging</h2>
+    <p>Open your browser's developer console (F12) to see action events logged when you click the CONTACT button.</p>
+  </div>
+
+  <script>
+    // Listen for header actions
+    document.addEventListener('apex-header:action', (e) => {
+      const action = e.detail.action;
+      console.log('✅ Apex Header Action:', action);
+
+      if (action === 'contact') {
+        console.log('✅ Contact drawer should now be open!');
+      }
+    });
+
+    // Log when page loads
+    window.addEventListener('load', () => {
+      console.log('✅ Page loaded. Header component initialized.');
+      console.log('✅ Click the CONTACT button to test the drawer.');
+    });
+  </script>
+
+</body>
+</html>
+

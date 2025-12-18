@@ -1,6 +1,6 @@
 {
   "name": "apex-header",
-  "version": "1.0.0",
+  "version": "1.7.0",
   "description": "Lightweight, self-injecting header component for Apex One websites",
   "main": "dist/apex-header.js",
   "scripts": {
