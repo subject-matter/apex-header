@@ -289,6 +289,7 @@
               '/cota-endurance',
               '/endurance-registration',
               '/sebring-endurance',
+              '/sebring-focus',
               '/tickets',
               '/gallery'
             ],
